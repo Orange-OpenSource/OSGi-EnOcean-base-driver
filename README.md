@@ -59,7 +59,7 @@ START LEVEL 1
     9|Active     |    1|org.osgi.service.enocean (6.0.0.201407091519) - org.osgi.service.enocean-6.0.0.jar
    10|Active     |    1|org.osgi.test.cases.enoceansimulation (6.0.0.201407091522) - org.osgi.test.cases.enoceansimulation-6.0.0.jar
    11|Active     |    1|osgi.cmpn (4.2.0.200908310645) - osgi.cmpn-4.2.0.jar
-   12|Active     |    1|comm.rxtx (0.0.0) - comm.rxtx.jar
+   12|Active     |    1|driver-rx-tx (0.0.0) - driver-rx-tx.jar
 
 ```
 * Start Felix.
