@@ -11,7 +11,7 @@ Tree
 ----
 
     .
-    ├── rxtx                             ; see https://github.com/Orange-OpenSource/Driver-RX-TX
+    ├── driver-rx-tx                     ; see https://github.com/Orange-OpenSource/Driver-RX-TX
                                          ; It's a generic interface bundle to the Serial port.
  
     ├── com.orange.impl.service.enocean  ; This bundle is the EnOcean Base Driver itself. This 
