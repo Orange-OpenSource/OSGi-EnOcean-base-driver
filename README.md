@@ -55,7 +55,7 @@ START LEVEL 1
     5|Active     |    1|Apache Felix Gogo Runtime (0.12.1) - org.apache.felix.gogo.runtime-0.12.1.jar
     6|Active     |    1|Apache Felix Gogo Shell (0.10.0) - org.apache.felix.gogo.shell-0.10.0.jar
     7|Active     |    1|Apache Felix Log Service (1.0.1) - org.apache.felix.log-1.0.1.jar
-    8|Active     |    1|org.osgi.impl.service.enocean (0.0.0) - org.osgi.impl.service.enocean.jar
+    8|Active     |    1|com.orange.impl.service.enocean (0.0.0) - com.orange.impl.service.enocean.jar
     9|Active     |    1|org.osgi.service.enocean (6.0.0.201407091519) - org.osgi.service.enocean-6.0.0.jar
    10|Active     |    1|org.osgi.test.cases.enoceansimulation (6.0.0.201407091522) - org.osgi.test.cases.enoceansimulation-6.0.0.jar
    11|Active     |    1|osgi.cmpn (4.2.0.200908310645) - osgi.cmpn-4.2.0.jar
