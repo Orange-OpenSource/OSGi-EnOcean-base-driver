@@ -26,10 +26,10 @@ Import-Package:  \
 	*
 
 -buildpath:  \
-	ee.j2se;version=1.4.0,\
 	osgi.core;version=4.2,\
 	osgi.cmpn;version=4.2,\
 	org.osgi.service.enocean;version=latest,\
-	comm.rxtx
+	comm.rxtx,\
+	ee.minimum;version=1.2
 
 -noee=true

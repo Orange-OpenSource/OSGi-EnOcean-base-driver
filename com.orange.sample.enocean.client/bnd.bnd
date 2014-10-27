@@ -8,10 +8,10 @@ Bundle-Description			= A sample app that demonstrates EnOcean calpabilities.
 Bundle-RequiredExecutionEnvironment = OSGi/Minimum-1.1
 
 -buildpath:  \
-	ee.j2se;version=1.4.0,\
 	osgi.core;version=4.2,\
 	osgi.cmpn;version=4.2,\
-	org.osgi.service.enocean;version=latest
+	org.osgi.service.enocean;version=latest,\
+	ee.minimum;version=1.2
 
 Private-Package:${p}.*;-split-package:=first
 
