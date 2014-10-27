@@ -236,9 +236,6 @@ public class EnOceanBaseDriver implements EnOceanPacketListener,
 					"1BS msg received, data and optional data: "
 							+ Utils.bytesToHexString(msg.getBytes()));
 
-			// TODO AAA: 1BS il va aussi falloir traiter/prendre en compte de
-			// message...
-
 			Logger.d(TAG, "DEBUG: msg: " + msg);
 			Logger.d(TAG, "DEBUG: msg.getDbm: " + msg.getDbm());
 			Logger.d(TAG,
@@ -289,29 +286,23 @@ public class EnOceanBaseDriver implements EnOceanPacketListener,
 			// TODO Here parameter data does NOT contain the full telegram as
 			// expected... Fix this.
 			msg = new Message(data) {
-
 				public int teachInType() {
-					// TODO Auto-generated method stub
-					return 0;
+					return -1;
 				}
 
 				public int teachInManuf() {
-					// TODO Auto-generated method stub
-					return 0;
+					return -1;
 				}
 
 				public int teachInFunc() {
-					// TODO Auto-generated method stub
-					return 0;
+					return -1;
 				}
 
 				public boolean isTeachin() {
-					// TODO Auto-generated method stub
 					return false;
 				}
 
 				public boolean hasTeachInInfo() {
-					// TODO Auto-generated method stub
 					return false;
 				}
 			};

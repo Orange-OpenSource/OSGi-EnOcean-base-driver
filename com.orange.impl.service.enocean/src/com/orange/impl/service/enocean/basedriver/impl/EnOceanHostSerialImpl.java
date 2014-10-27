@@ -115,7 +115,6 @@ public class EnOceanHostSerialImpl extends EnOceanHostImpl implements
 				try {
 					inputStream.skip(inputStream.available());
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}

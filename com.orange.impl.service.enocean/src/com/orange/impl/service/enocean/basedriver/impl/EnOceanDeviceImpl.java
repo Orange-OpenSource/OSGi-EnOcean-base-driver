@@ -55,6 +55,12 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 	private EnOceanBaseDriver driver;
 	private int chip_id;
 
+	private int rollingCode = -1;
+	private byte[] encryptionKey = null;
+	private String name = null;
+	private String profileName = null;
+	private int securityLevelFormat = -1;
+
 	/**
 	 * An {@link EnOceanDeviceImpl} creation is directly related to its
 	 * registration within the framework. Such a Device should only be
@@ -74,7 +80,9 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 	 */
 	public EnOceanDeviceImpl(BundleContext bc, EnOceanBaseDriver driver,
 			int uid, int rorg, int func, int type, int manuf) {
-		Logger.d(TAG, "EnOceanDeviceImpl(bc: " + bc+", driver: "+driver+", uid: "+uid+", rorg: "+rorg+", func: "+func+", type: "+type+", manuf: "+manuf);
+		Logger.d(TAG, "EnOceanDeviceImpl(bc: " + bc + ", driver: " + driver
+				+ ", uid: " + uid + ", rorg: " + rorg + ", func: " + func
+				+ ", type: " + type + ", manuf: " + manuf);
 		this.bc = bc;
 		this.driver = driver;
 		this.chip_id = uid;
@@ -92,19 +100,21 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 					Logger.d(TAG, "This is an A5-02-05 device.");
 					friendlyName = "A5-02-05";
 					description = "Temperature Sensor Range 0°C to +40°C";
-				}else{
+				} else {
 					Logger.d(TAG, "This is an A5-02-yz device.");
 					friendlyName = "A5-02-yz";
 					description = "Not handled";
 				}
-			}else{
+			} else {
 				Logger.d(TAG, "This is an A5-wx-yz device.");
 				friendlyName = "A5-wx-yz";
 				description = "Not handled";
 			}
 		} else if ("246".equals(String.valueOf(rorg))) {
 			// hex 0xf6 == int 246.
-			Logger.d(TAG, "This is a F6-wx-yz device. FUNC, and TYPE are NOT sent by F6-wx-yz device. The system then assumes that the device is an F6-02-01.");
+			Logger.d(
+					TAG,
+					"This is a F6-wx-yz device. FUNC, and TYPE are NOT sent by F6-wx-yz device. The system then assumes that the device is an F6-02-01.");
 			friendlyName = "F6-02-01";
 			description = "Light and Blind Control - Application Style 1";
 		} else if ("213".equals(String.valueOf(rorg))) {
@@ -114,13 +124,13 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 					"This is a D5-wx-yz device. FUNC, and TYPE are NOT sent by D5-wx-yz device. The system then assumes that the device is a D5-00-01.");
 			friendlyName = "D5-00-01";
 			description = "Single Input Contact";
-		}else{
+		} else {
 			Logger.d(
 					TAG,
 					"This is a NOT HANDLED device (rorg: "
 							+ String.valueOf(rorg)
 							+ ", i.e. neither an A5-02-05 device, nor a F6-wx-yz device, nor a D5-wx-yz device. "
-					+ "RORG is NOT equal to a5, nor f6,nor d5 (0xa5 is equal to int 165; 0xf6 -> 246, 0xd5 -> 213).");
+							+ "RORG is NOT equal to a5, nor f6,nor d5 (0xa5 is equal to int 165; 0xf6 -> 246, 0xd5 -> 213).");
 		}
 		props.put("DEVICE_FRIENDLY_NAME", friendlyName);
 		props.put(Constants.DEVICE_DESCRIPTION, description);
@@ -160,29 +170,19 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 	}
 
 	public int getRollingCode() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.rollingCode;
 	}
 
 	public void setRollingCode(int rollingCode) {
-		// TODO Auto-generated method stub
+		this.rollingCode = rollingCode;
 	}
 
 	public byte[] getEncryptionKey() {
-		// TODO Auto-generated method stub
-		return null;
+		return encryptionKey;
 	}
 
 	public void setEncryptionKey(byte[] key) {
-		// TODO Auto-generated method stub
-	}
-
-	/**
-	 * @return last telegram
-	 */
-	public EnOceanMessage getLastTelegram() {
-		// TODO Auto-generated method stub
-		return null;
+		this.encryptionKey = key;
 	}
 
 	public int[] getLearnedDevices() {
@@ -191,19 +191,17 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 	}
 
 	/**
-	 * @return RPC
-	 */
-	public Map getRPC() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/**
 	 * @return name
 	 */
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		return name;
+	}
+
+	/**
+	 * @param name
+	 */
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	/**
@@ -216,11 +214,26 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 		// TODO Auto-generated method stub
 	}
 
+	// /**
+	// * @return last telegram
+	// */
+	// public EnOceanMessage getLastTelegram() {
+	// // TODO Auto-generated method stub
+	// return null;
+	// }
+
 	/**
 	 * @return last message
 	 */
 	public EnOceanMessage getLastMessage() {
 		return lastMessage;
+	}
+
+	/**
+	 * @param msg
+	 */
+	public void setLastMessage(EnOceanMessage msg) {
+		lastMessage = msg;
 	}
 
 	public Map getRPCs() {
@@ -232,37 +245,29 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 	 * @return profile name
 	 */
 	public String getProfileName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public int getSecurityLevelFormat() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	/**
-	 * @param name
-	 */
-	public void setName(String name) {
-		// TODO Auto-generated method stub
-
+		return profileName;
 	}
 
 	/**
 	 * @param profileName
 	 */
 	public void setProfileName(String profileName) {
-		// TODO Auto-generated method stub
+		this.profileName = profileName;
+	}
 
+	public int getSecurityLevelFormat() {
+		return securityLevelFormat;
 	}
 
 	/**
-	 * @param securityLevel
+	 * @param securityLevelFormat
 	 */
-	public void getSecurityLevelFormat(int securityLevel) {
-		// TODO Auto-generated method stub
+	public void setSecurityLevelFormat(int securityLevelFormat) {
+		this.securityLevelFormat = securityLevelFormat;
+	}
 
+	public int getRorg() {
+		return getIntProperty(EnOceanDevice.RORG);
 	}
 
 	/**
@@ -272,14 +277,26 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 		props.put(EnOceanDevice.RORG, String.valueOf(rorg));
 	}
 
+	public int getFunc() {
+		return getIntProperty(EnOceanDevice.FUNC);
+	}
+
 	public void setFunc(int func) {
 		props.put(EnOceanDevice.FUNC, String.valueOf(func));
 		sReg.setProperties(props);
 	}
 
+	public int getType() {
+		return getIntProperty(EnOceanDevice.TYPE);
+	}
+
 	public void setType(int type) {
 		props.put(EnOceanDevice.TYPE, String.valueOf(type));
 		sReg.setProperties(props);
+	}
+
+	public int getManufacturer() {
+		return getIntProperty(EnOceanDevice.MANUFACTURER);
 	}
 
 	/**
@@ -294,31 +311,8 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 		return chip_id;
 	}
 
-	public int getRorg() {
-		return getIntProperty(EnOceanDevice.RORG);
-	}
-
-	public int getFunc() {
-		return getIntProperty(EnOceanDevice.FUNC);
-	}
-
-	public int getType() {
-		return getIntProperty(EnOceanDevice.TYPE);
-	}
-
-	public int getManufacturer() {
-		return getIntProperty(EnOceanDevice.MANUFACTURER);
-	}
-
 	/**
-	 * @param msg
-	 */
-	public void setLastMessage(EnOceanMessage msg) {
-		lastMessage = msg;
-	}
-
-	/**
-	 * Safe function to get an integer property
+	 * Safe function to get an int property
 	 * 
 	 * @param key
 	 * @return the int-converted property, or -1
