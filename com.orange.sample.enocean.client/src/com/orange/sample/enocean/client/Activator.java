@@ -75,11 +75,11 @@ public class Activator implements BundleActivator, ServiceTrackerCustomizer,
 		deviceEventSubscription = bc.registerService(
 				EventHandler.class.getName(), this, ht);
 
-		try {
-			Thread.sleep(3000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		// try {
+		// Thread.sleep(3000);
+		// } catch (InterruptedException e) {
+		// e.printStackTrace();
+		// }
 
 		ServiceReference[] srs = bc.getAllServiceReferences(
 				EnOceanDevice.class.getName(), null);
