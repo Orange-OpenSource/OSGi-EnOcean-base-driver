@@ -178,7 +178,7 @@ public class Utils {
 		return c;
 	}
 
-	// Collection of helper functions TODO: Pay attention to ENDIANNESS
+	// Collection of helper functions --> Pay attention to ENDIANNESS
 
 	/**
 	 * @param x

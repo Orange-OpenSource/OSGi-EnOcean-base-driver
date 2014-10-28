@@ -68,6 +68,8 @@ public class EnOceanHostImpl extends Thread implements EnOceanHost {
 	/** isRunning */
 	protected boolean isRunning;
 	private ChipPIDMapping chipIdPidMap;
+	private int repeaterLevel = -1;
+	private int baseID = -1;
 
 	/**
 	 * @param path
@@ -128,7 +130,6 @@ public class EnOceanHostImpl extends Thread implements EnOceanHost {
 
 	public void reset() throws EnOceanException {
 		// TODO Auto-generated method stub
-
 	}
 
 	public String appVersion() throws EnOceanException {
@@ -142,23 +143,19 @@ public class EnOceanHostImpl extends Thread implements EnOceanHost {
 	}
 
 	public int getBaseID() throws EnOceanException {
-		// TODO Auto-generated method stub
-		return 0;
+		return baseID;
 	}
 
 	public void setBaseID(int baseID) throws EnOceanException {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void setRepeaterLevel(int level) throws EnOceanException {
-		// TODO Auto-generated method stub
-
+		this.baseId = baseID;
 	}
 
 	public int getRepeaterLevel() throws EnOceanException {
-		// TODO Auto-generated method stub
-		return 0;
+		return repeaterLevel;
+	}
+
+	public void setRepeaterLevel(int level) throws EnOceanException {
+		repeaterLevel = level;
 	}
 
 	public int getChipId(String servicePID) {

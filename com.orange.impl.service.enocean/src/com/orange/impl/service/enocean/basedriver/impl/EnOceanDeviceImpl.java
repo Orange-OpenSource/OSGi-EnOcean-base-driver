@@ -214,14 +214,6 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 		// TODO Auto-generated method stub
 	}
 
-	// /**
-	// * @return last telegram
-	// */
-	// public EnOceanMessage getLastTelegram() {
-	// // TODO Auto-generated method stub
-	// return null;
-	// }
-
 	/**
 	 * @return last message
 	 */

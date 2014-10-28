@@ -54,7 +54,7 @@ import com.orange.impl.service.enocean.utils.Logger;
  * 
  * 4 | 1 | DB0.3 | Learn Button | LRN | ... | Enum: 0: pressed 1: not pressed
  * 
- * 7 | 1 | DB0.0 | Contact | CO | ... | Enum: 0: open 1: not closed
+ * 7 | 1 | DB0.0 | Contact | CO | ... | Enum: 0: open 1: closed
  */
 public class Message1BS extends Message {
 
@@ -73,6 +73,14 @@ public class Message1BS extends Message {
 	 */
 	public Message1BS(byte[] data) {
 		super(data);
+
+		Logger.d(TAG, "getPayloadBytes(): " + getPayloadBytes());
+		int i = 0;
+		while (i < getPayloadBytes().length) {
+			Logger.d(TAG, "getPayloadBytes()[" + i + "]: "
+					+ getPayloadBytes()[i]);
+			i = i + 1;
+		}
 	}
 
 	public boolean isTeachin() {
@@ -80,42 +88,38 @@ public class Message1BS extends Message {
 	}
 
 	/**
-	 * @return true if the message teach-in embeds profile & manufacturer info.
+	 * @return true if the message teach-in embeds profile & manufacturer info,
+	 *         false otherwise.
 	 */
 	public boolean hasTeachInInfo() {
-		// TODO AAA: 1BS to be implemented
-		Logger.d(TAG, "// TODO AAA: 1BS to be implemented");
-		return (getPayloadBytes()[3] & 0x80) != 0;
+		// This is always false with 1BS message.
+		return false;
 	}
 
 	/**
 	 * @return the FUNC in the case of a teach-in message with information.
+	 *         Return -1 if non-relevant.
 	 */
 	public int teachInFunc() {
-		// TODO AAA: 1BS to be implemented
-		Logger.d(TAG, "// TODO AAA: 1BS to be implemented");
-		return (getPayloadBytes()[0] >> 2) & 0xff;
+		// This is non-relevant with 1BS message.
+		return -1;
 	}
 
 	/**
 	 * @return the TYPE in the case of a teach-in message with information.
+	 *         Return -1 if non-relevant.
 	 */
 	public int teachInType() {
-		// TODO AAA: 1BS to be implemented
-		Logger.d(TAG, "// TODO AAA: 1BS to be implemented");
-		byte b0 = getPayloadBytes()[0];
-		byte b1 = getPayloadBytes()[1];
-		return (((b0 & 0x03) << 5) & 0xff) | ((((b1 >> 3)) & 0xff));
+		// This is non-relevant with 1BS message.
+		return -1;
 	}
 
 	/**
 	 * @return the MANUF in the case of a teach-in message with information.
+	 *         Return -1 if non-relevant.
 	 */
 	public int teachInManuf() {
-		// TODO AAA: 1BS to be implemented
-		Logger.d(TAG, "// TODO AAA: 1BS to be implemented");
-		byte b0 = (byte) ((getPayloadBytes()[1]) & 0x07);
-		byte b1 = getPayloadBytes()[2];
-		return ((b0 & 0xff) << 8) + (b1 & 0xff);
+		// This is non-relevant with 1BS message.
+		return -1;
 	}
 }
