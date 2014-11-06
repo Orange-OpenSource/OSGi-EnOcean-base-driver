@@ -35,6 +35,10 @@ public class EnOceanBundleActivator implements BundleActivator {
 	private EnOceanBaseDriver basedriver;
 
 	public void start(BundleContext bc) {
+
+		// TODO AAA: Somewhere, the base-driver should register an "fake"
+		// EnOcean switch device that representes the base-driver itself...
+
 		basedriver = new EnOceanBaseDriver(bc);
 		basedriver.start();
 	}
