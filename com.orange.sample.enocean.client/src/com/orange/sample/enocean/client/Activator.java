@@ -32,14 +32,13 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.enocean.EnOceanDevice;
 import org.osgi.service.enocean.EnOceanEvent;
-import org.osgi.service.enocean.EnOceanHandler;
 import org.osgi.service.enocean.EnOceanMessage;
-import org.osgi.service.enocean.EnOceanRPC;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
+import com.orange.sample.enocean.client.shell.MiscCommand;
 import com.orange.sample.enocean.client.utils.Logger;
 import com.orange.sample.enocean.client.utils.Utils;
 
@@ -81,6 +80,7 @@ public class Activator implements BundleActivator, ServiceTrackerCustomizer,
 		// e.printStackTrace();
 		// }
 
+		// Display the EnOceanDevice services.
 		ServiceReference[] srs = bc.getAllServiceReferences(
 				EnOceanDevice.class.getName(), null);
 		Logger.print("srs: " + srs);
@@ -121,72 +121,129 @@ public class Activator implements BundleActivator, ServiceTrackerCustomizer,
 						+ eod.getLearnedDevices());
 				Logger.print("eod.getRPCs(): " + eod.getRPCs());
 
-				// The following RPC is a copy of:
-				// org.osgi.test.cases.enocean.rpc.QueryFunction
-				EnOceanRPC rpc = new EnOceanRPC() {
-
-					// sender='0x0180abb8'
-
-					// propertyNames[0]: enocean.device.profile.func,
-					// event.getProperty(propertyNames[0]): -1
-
-					// propertyNames[1]: enocean.device.profile.rorg,
-					// event.getProperty(propertyNames[1]): 165
-
-					// propertyNames[2]: enocean.device.chip_id,
-					// event.getProperty(propertyNames[2]): 25209784
-
-					// propertyNames[3]: enocean.device.profile.type,
-					// event.getProperty(propertyNames[3]): -1
-
-					// propertyNames[4]: enocean.message,
-					// event.getProperty(propertyNames[4]): a5000074080180abb800
-
-					// private int senderId = -1;
-					private int senderId = 0x0180abb8;
-
-					public void setSenderId(int chipId) {
-						this.senderId = chipId;
-					}
-
-					public void setPayload(byte[] data) {
-						// does nothing;
-						Logger.print("rpc.setPayLoad(data: " + data + ")");
-					}
-
-					public int getSenderId() {
-						return senderId;
-					}
-
-					public byte[] getPayload() {
-						return null;
-					}
-
-					public int getManufacturerId() {
-						return 0x07ff;
-					}
-
-					public int getFunctionId() {
-						// return 0x0007;
-						return -1;
-					}
-				};
-
-				EnOceanHandler handler = new EnOceanHandler() {
-					public void notifyResponse(EnOceanRPC enOceanRPC,
-							byte[] payload) {
-						Logger.print("enOceanRPC: " + enOceanRPC
-								+ ", payload: " + payload);
-					}
-				};
-
-				Logger.print("BEFORE invoking...");
-				eod.invoke(rpc, handler);
-				Logger.print("AFTER invoking...");
+				// // The following RPC is a copy of:
+				// // org.osgi.test.cases.enocean.rpc.QueryFunction
+				// EnOceanRPC rpc = new EnOceanRPC() {
+				//
+				// // sender='0x0180abb8'
+				//
+				// // propertyNames[0]: enocean.device.profile.func,
+				// // event.getProperty(propertyNames[0]): -1
+				//
+				// // propertyNames[1]: enocean.device.profile.rorg,
+				// // event.getProperty(propertyNames[1]): 165
+				//
+				// // propertyNames[2]: enocean.device.chip_id,
+				// // event.getProperty(propertyNames[2]): 25209784
+				//
+				// // propertyNames[3]: enocean.device.profile.type,
+				// // event.getProperty(propertyNames[3]): -1
+				//
+				// // propertyNames[4]: enocean.message,
+				// // event.getProperty(propertyNames[4]): a5000074080180abb800
+				//
+				// // private int senderId = -1;
+				// private int senderId = 0x0180abb8;
+				//
+				// public void setSenderId(int chipId) {
+				// this.senderId = chipId;
+				// }
+				//
+				// // public void setPayload(byte[] data) {
+				// // // does nothing;
+				// // Logger.print("rpc.setPayLoad(data: " + data + ")");
+				// // }
+				//
+				// public int getSenderId() {
+				// return senderId;
+				// }
+				//
+				// public byte[] getPayload() {
+				// return null;
+				// }
+				//
+				// public int getManufacturerId() {
+				// return 0x07ff;
+				// }
+				//
+				// public int getFunctionId() {
+				// // return 0x0007;
+				// return -1;
+				// }
+				//
+				// public String getName() {
+				// // TODO Auto-generated method stub
+				// return null;
+				// }
+				// };
+				//
+				// EnOceanHandler handler = new EnOceanHandler() {
+				// public void notifyResponse(EnOceanRPC enOceanRPC,
+				// byte[] payload) {
+				// Logger.print("enOceanRPC: " + enOceanRPC
+				// + ", payload: " + payload);
+				// }
+				// };
+				//
+				// Logger.print("BEFORE invoking...");
+				// eod.invoke(rpc, handler);
+				// Logger.print("AFTER invoking...");
 
 				i = i + 1;
+				
+				// // Let's create an enoceanrpc in order to turn on the plug.
+				// EnOceanRPC turnOnRpc = new EnOceanRPC() {
+				// private int senderId = 0x0180abb8;
+				//
+				// public void setSenderId(int chipId) {
+				// this.senderId = chipId;
+				// }
+				//
+				// public int getSenderId() {
+				// return senderId;
+				// }
+				//
+				// public byte[] getPayload() {
+				// return null;
+				// }
+				//
+				// public int getManufacturerId() {
+				// return -1;
+				// }
+				//
+				// public int getFunctionId() {
+				// return -1;
+				// }
+				//
+				// public String getName() {
+				// return "HARDCODED_TURN_ON";
+				// }
+				// };
+				//
+				// EnOceanHandler handlerTurnOnRpc = new EnOceanHandler() {
+				// public void notifyResponse(EnOceanRPC enOceanRPC,
+				// byte[] payload) {
+				// Logger.print("enOceanRPC: " + enOceanRPC
+				// + ", payload: " + payload);
+				// }
+				// };
+				//
+				// Logger.print("BEFORE invoking...");
+				// eod.invoke(turnOnRpc, handlerTurnOnRpc);
+				// Logger.print("AFTER invoking...");
+				
 			}
 		}
+
+		// Add shell commands to test EnOcean developments.
+		Hashtable props = new Hashtable();
+		props.put("osgi.command.scope", "felix");
+		// "aa", see method "aa" in MiscCommand, etc.
+		// "ap" is for appair, "on" for turn on, and "of" for turn off.
+		props.put("osgi.command.function", new String[] { "aa", "bb", "ds",
+				"ap", "on", "of", "apb", "onb", "ofb" });
+		bc.registerService(MiscCommand.class.getName(), new MiscCommand(bc),
+				props);
 
 		System.out
 				.println("OUT: com.orange.sample.enocean.client.Activator.start(bc: "
