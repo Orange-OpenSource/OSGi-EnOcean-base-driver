@@ -39,7 +39,6 @@ import org.osgi.service.enocean.EnOceanEvent;
 import org.osgi.service.enocean.EnOceanHost;
 import org.osgi.service.enocean.EnOceanMessage;
 import org.osgi.service.enocean.descriptions.EnOceanChannelDescriptionSet;
-import org.osgi.service.enocean.descriptions.EnOceanRPCDescriptionSet;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.service.event.EventHandler;
@@ -55,6 +54,7 @@ import com.orange.impl.service.enocean.basedriver.radio.Message;
 import com.orange.impl.service.enocean.basedriver.radio.Message1BS;
 import com.orange.impl.service.enocean.basedriver.radio.Message4BS;
 import com.orange.impl.service.enocean.basedriver.radio.MessageRPS;
+import com.orange.impl.service.enocean.basedriver.radio.MessageUTE;
 import com.orange.impl.service.enocean.utils.EnOceanHostImplException;
 import com.orange.impl.service.enocean.utils.Logger;
 import com.orange.impl.service.enocean.utils.Utils;
@@ -246,7 +246,8 @@ public class EnOceanBaseDriver implements EnOceanPacketListener,
 					TAG,
 					"DEBUG: msg.getSecurityLevelFormat: "
 							+ msg.getSecurityLevelFormat());
-			Logger.d(TAG, "DEBUG: msg.getSenderId: " + msg.getSenderId());
+			Logger.d(TAG,
+					"DEBUG: msg.getSenderId (as an int): " + msg.getSenderId());
 			Logger.d(TAG, "DEBUG: msg.getStatus: " + msg.getStatus());
 			Logger.d(TAG, "DEBUG: msg.getSubTelNum: " + msg.getSubTelNum());
 			Logger.d(TAG, "DEBUG: msg.getType: " + msg.getType());
@@ -277,7 +278,60 @@ public class EnOceanBaseDriver implements EnOceanPacketListener,
 				Logger.d(TAG, "message is not a teach-in. msg: " + msg);
 			}
 			break;
+		case Message.MESSAGE_UTE:
+			// TODO Here parameter data does NOT contain the full telegram as
+			// expected... Fix this.
+			msg = new MessageUTE(data);
+			Logger.d(
+					TAG,
+					"UTE msg received, data and optional data: "
+							+ Utils.bytesToHexString(msg.getBytes()));
 
+			Logger.d(TAG, "DEBUG: msg: " + msg);
+			Logger.d(TAG, "DEBUG: msg.getDbm: " + msg.getDbm());
+			Logger.d(TAG,
+					"DEBUG: msg.getDestinationId: " + msg.getDestinationId());
+			Logger.d(TAG, "DEBUG: msg.getFunc: " + msg.getFunc());
+			Logger.d(TAG, "DEBUG: msg.getRorg: " + msg.getRorg());
+			Logger.d(
+					TAG,
+					"DEBUG: msg.getSecurityLevelFormat: "
+							+ msg.getSecurityLevelFormat());
+			Logger.d(TAG,
+					"DEBUG: msg.getSenderId (as an int): " + msg.getSenderId());
+			Logger.d(TAG, "DEBUG: msg.getStatus: " + msg.getStatus());
+			Logger.d(TAG, "DEBUG: msg.getSubTelNum: " + msg.getSubTelNum());
+			Logger.d(TAG, "DEBUG: msg.getType: " + msg.getType());
+			Logger.d(TAG, "DEBUG: msg.getBytes: " + msg.getBytes());
+			Logger.d(TAG, "DEBUG: msg.getClass: " + msg.getClass());
+			Logger.d(TAG,
+					"DEBUG: msg.getPayloadBytes: " + msg.getPayloadBytes());
+			Logger.d(TAG, "DEBUG: msg.getTelegrams: " + msg.getTelegrams());
+			Logger.d(TAG, "DEBUG: msg.isTeachin: " + msg.isTeachin());
+
+			if (msg.isTeachin()) {
+				EnOceanDevice enOceanDevice = getAssociatedDevice(msg);
+				if (enOceanDevice == null) {
+					if (msg.hasTeachInInfo()) {
+						// TODO AAA: Use msg.teachinFunc(), teachinType().
+						// instead of msg.getFunc(), getType() if relevant.
+						registerDeviceAndProfile(msg.getSenderId(),
+								msg.getRorg(), msg.getFunc(), msg.getType(),
+								msg.teachInManuf());
+					} else {
+						// TODO AAA: Handle that case properly.
+						Logger.d(TAG,
+								"message was a teach-in, but has no teachin info.");
+					}
+				} else {
+					Logger.d(TAG,
+							"message was a teach-in, but device already exists.");
+				}
+				return; // No need to do more processing on the message
+			} else {
+				Logger.d(TAG, "message is not a teach-in. msg: " + msg);
+			}
+			break;
 		// case Message.MESSAGE_SYS_EX:
 		// return;
 		// case Message.MESSAGE_VLD:
@@ -322,7 +376,8 @@ public class EnOceanBaseDriver implements EnOceanPacketListener,
 					TAG,
 					"DEBUG: msg.getSecurityLevelFormat: "
 							+ msg.getSecurityLevelFormat());
-			Logger.d(TAG, "DEBUG: msg.getSenderId: " + msg.getSenderId());
+			Logger.d(TAG,
+					"DEBUG: msg.getSenderId (as an int): " + msg.getSenderId());
 			Logger.d(TAG, "DEBUG: msg.getStatus: " + msg.getStatus());
 			Logger.d(TAG, "DEBUG: msg.getSubTelNum: " + msg.getSubTelNum());
 			Logger.d(TAG, "DEBUG: msg.getType: " + msg.getType());

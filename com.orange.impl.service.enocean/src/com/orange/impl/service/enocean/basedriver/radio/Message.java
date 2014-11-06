@@ -45,6 +45,11 @@ public abstract class Message implements EnOceanMessage {
 	public static final byte MESSAGE_VLD = (byte) 0xD2;
 	/** MESSAGE_SYS_EX */
 	public static final byte MESSAGE_SYS_EX = (byte) 0xC5;
+	/**
+	 * MESSAGE_UTE, see EnOcean_Equipment_Profiles_EEP_V2.61_public.pdf, page
+	 * 167, 3.6) UTE - Universla Uni- and Bidirectional Teach-in.
+	 */
+	public static final byte MESSAGE_UTE = (byte) 0xD4;
 
 	private byte RORG;
 	private byte[] data;
