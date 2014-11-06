@@ -124,6 +124,23 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 					"This is a D5-wx-yz device. FUNC, and TYPE are NOT sent by D5-wx-yz device. The system then assumes that the device is a D5-00-01.");
 			friendlyName = "D5-00-01";
 			description = "Single Input Contact";
+		} else if ("210".equals(String.valueOf(rorg))) {
+			// hex 0xd2 == int 210.
+			if ("1".equals(String.valueOf(func))) {
+				if ("8".equals(String.valueOf(type))) {
+					Logger.d(TAG, "This is a D2-01-08 device.");
+					friendlyName = "D2-01-08";
+					description = "Electronic switches and dimmers with Energy Measurement and Local Control";
+				} else {
+					Logger.d(TAG, "This is a D2-01-yz device.");
+					friendlyName = "D2-01-yz";
+					description = "Not handled";
+				}
+			} else {
+				Logger.d(TAG, "This is a D2-wx-yz device.");
+				friendlyName = "D2-wx-yz";
+				description = "Not handled";
+			}
 		} else {
 			Logger.d(
 					TAG,
@@ -320,11 +337,158 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 
 	public void invoke(EnOceanRPC rpc, EnOceanHandler handler)
 			throws IllegalArgumentException {
-		// Generate the SYS_EX message relative to the RPC
-		MessageSYS_EX msg = new MessageSYS_EX(rpc);
-		for (int i = 0; i < msg.getSubTelNum(); i++) {
-			byte[] telegram = (byte[]) msg.getTelegrams().get(i);
-			driver.send(telegram);
+
+		if ("HARDCODED_UTE_APPAIR".equals(rpc.getName())) {
+			Logger.d(TAG, "HARDCODED_UTE_APPAIR");
+			// 55 00 0D 07 01 FD D4 D2 01 08 00 3E FF 91 00 00 00 00 00 03 01 85
+			// 64 14 FF 00 E9
+			// 0x ----------- : 55 00 0D 07 01 FD D4 D2 01 08 00 3E FF 91
+			// 00 00 00 00 00 03 01 85 64 14 FF 00 E9
+
+			// unsigned int - : 85 00 13 07 01 253 212 210 01 08 00 62 255 145
+			// 00 00 00 00 00 03 01 133 100 20 255 00 233
+
+			byte[] fullVldTurnOnPacket = { 85, 00, 13, 07, 01, (byte) 253,
+					(byte) 212, (byte) 210, 01, 8, 00, 62, (byte) 255,
+					(byte) 145, 00, 00, 00, 00, 00, 03, 01, (byte) 133, 100,
+					20, (byte) 255, 00, (byte) 233 };
+
+			Logger.d(TAG, "Utils.bytesToHexString(fullVldTurnOnPacket): "
+					+ Utils.bytesToHexString(fullVldTurnOnPacket));
+			Logger.d(TAG, "BEFORE: driver.send(fullVldTurnOnPacket)");
+			driver.send(fullVldTurnOnPacket);
+			Logger.d(TAG, "AFTER: driver.send(fullVldTurnOnPacket)");
+
+		} else if ("HARDCODED_VLD_TURN_ON".equals(rpc.getName())) {
+			Logger.d(TAG, "HARDCODED_VLD_TURN_ON");
+
+			// <Telegram Timestamp="2014-11-04 14:19:05.396"
+			// Direction="Incoming" Port="COM4" RORG="F6" Data="50" Status="30"
+			// ID="0029219F" dBm="-54" DestinationID="FFFFFFFF"
+			// SecurityLevel="0" SubtelegramCount="1" Tickcount="0">
+			// <Packet Timestamp="2014-11-04 14:19:05.396" Direction="Incoming"
+			// Port="COM4" Type="01" Data="F6 50 00 29 21 9F 30"
+			// OptionalData="01 FF FF FF FF 36 00" />
+			// </Telegram>
+
+			// 0x55000707017af6500029219f3001ffffffff39009f
+			// 0x ----------- : 55 00 07 07 01 7a f6 50 00 29 21 9f 30 01 ff
+			// ff ff ff 39 00 9f
+			// unsigned int - : 85 00 07 07 01 112 246 80 00 41 33 159 48 01 255
+			// 255 255 255 57 00 159
+			// byte[] fullTurnOnPacket = { 85, 00, 07, 07, 01, 112, (byte) 246,
+			// 80, 00, 41, 33, (byte) 159, 48, 01, (byte) 255, (byte) 255,
+			// (byte) 255, (byte) 255, 57, 00, (byte) 159 };
+
+			// 0x ----------- : 55 00 07 07 01 7A F6 50 00 29 21 9F 30 01
+			// FF FF FF FF 2D 00 9C
+			// unsigned int - : 85 00 07 07 01 122 246 80 00 41 33 159 48 01
+			// 255 255 255 255 45 00 156
+
+			// let's replace destinationId FFFFFFFF by the plug id:
+			// 0x : 01 85 64 14
+			// uint: 01 133 100 20
+			// this requires to change the crc...
+
+			// byte[] switchFullTurnOnPacket = { 85, 00, 07, 07, 01, 122,
+			// (byte) 246, 80, 00, 41, 33, (byte) 159, 48, 01, (byte) 255,
+			// (byte) 255, (byte) 255, (byte) 255, 45, 00, (byte) 156 };
+			//
+			// Logger.d(TAG, "Utils.bytesToHexString(switchFullTurnOnPacket): "
+			// + Utils.bytesToHexString(switchFullTurnOnPacket));
+			// Logger.d(TAG, "BEFORE: driver.send(switchFullTurnOnPacket)");
+			// driver.send(switchFullTurnOnPacket);
+			// Logger.d(TAG, "AFTER: driver.send(switchFullTurnOnPacket)");
+
+			// <Telegram Timestamp="2014-11-04 15:20:16.122"
+			// Direction="Outgoing" Port="COM4" RORG="D2" Data="01 00 01"
+			// Status="00" ID="00000000" dBm="0" DestinationID="01856414"
+			// SecurityLevel="0" SubtelegramCount="3" Tickcount="0">
+			// <Packet Timestamp="2014-11-04 15:20:16.122" Direction="Outgoing"
+			// Port="COM4" Type="01" Data="D2 01 00 01 00 00 00 00 00"
+			// OptionalData="03 01 85 64 14 FF 00" />
+			// </Telegram>
+
+			// 0x ----------- : 55 00 09 07 01 56 D2 01 00 01 00 00 00 00 00 03
+			// 01 85 64 14 FF 00 64
+			// unsigned int - : 85 00 09 07 01 86 210 01 00 01 00 00 00 00 00 03
+			// 01 133 100 20 255 00 100
+
+			byte[] fullVldTurnOnPacket = { 85, 00, 9, 07, 01, 86, (byte) 210,
+					01, 00, 01, 00, 00, 00, 00, 00, 03, 01, (byte) 133, 100,
+					20, (byte) 255, 00, 100 };
+
+			Logger.d(TAG, "Utils.bytesToHexString(fullVldTurnOnPacket): "
+					+ Utils.bytesToHexString(fullVldTurnOnPacket));
+			Logger.d(TAG, "BEFORE: driver.send(fullVldTurnOnPacket)");
+			driver.send(fullVldTurnOnPacket);
+			Logger.d(TAG, "AFTER: driver.send(fullVldTurnOnPacket)");
+
+		} else if ("HARDCODED_VLD_TURN_OFF".equals(rpc.getName())) {
+			Logger.d(TAG, "HARDCODED_VLD_TURN_OFF");
+
+			// 0x ----------- : 55 00 09 07 01 56 D2 01 00 00 00 00 00 00 00 03
+			// 01 85 64 14 FF 00 F0
+			// unsigned int - : 85 00 09 07 01 86 210 01 00 00 00 00 00 00 00 03
+			// 01 133 100 20 255 00 240
+
+			byte[] fullVldTurnOffPacket = { 85, 00, 9, 07, 01, 86, (byte) 210,
+					01, 00, 00, 00, 00, 00, 00, 00, 03, 01, (byte) 133, 100,
+					20, (byte) 255, 00, (byte) 240 };
+
+			Logger.d(TAG, "Utils.bytesToHexString(fullVldTurnOffPacket): "
+					+ Utils.bytesToHexString(fullVldTurnOffPacket));
+			Logger.d(TAG, "BEFORE: driver.send(fullVldTurnOffPacket)");
+			driver.send(fullVldTurnOffPacket);
+			Logger.d(TAG, "AFTER: driver.send(fullVldTurnOffPacket)");
+
+		} else if ("HARDCODED_APPAIR_TURN_ON".equals(rpc.getName())) {
+			Logger.d(TAG, "HARDCODED_APPAIR_TURN_ON");
+
+			// 0x ----------- : 55 00 07 07 01 7A F6 50 00 29 21 9F 30 01 FF FF
+			// FF FF 31 00 37
+
+			// unsigned int - : 85 00 07 07 01 122 246 80 00 41 33 159 48 01 255
+			// 255 255 255 49 00 55
+
+			byte[] fullSwitchAppairTurnOnPacket = { 85, 00, 07, 07, 01, 122,
+					(byte) 246, 80, 00, 41, 33, (byte) 159, 48, 01, (byte) 255,
+					(byte) 255, (byte) 255, (byte) 255, 49, 00, 55 };
+
+			Logger.d(
+					TAG,
+					"Utils.bytesToHexString(fullSwitchAppairTurnOnPacket): "
+							+ Utils.bytesToHexString(fullSwitchAppairTurnOnPacket));
+			Logger.d(TAG, "BEFORE: driver.send(fullSwitchAppairTurnOnPacket)");
+			driver.send(fullSwitchAppairTurnOnPacket);
+			Logger.d(TAG, "AFTER: driver.send(fullSwitchAppairTurnOnPacket)");
+
+		} else if ("HARDCODED_TURN_OFF".equals(rpc.getName())) {
+			Logger.d(TAG, "HARDCODED_TURN_OFF");
+
+			// 0x ----------- : 55 00 07 07 01 7A F6 70 00 29 21 9F 30 01 FF FF
+			// FF FF 2D 00 62
+
+			// unsigned int - : 85 00 07 07 01 122 246 112 00 41 33 159 48 01
+			// 255 255 255 255 45 00 98
+
+			byte[] fullSwitchTurnOffPacket = { 85, 00, 07, 07, 01, 122,
+					(byte) 246, 112, 00, 41, 33, (byte) 159, 48, 01,
+					(byte) 255, (byte) 255, (byte) 255, (byte) 255, 45, 00, 98 };
+
+			Logger.d(TAG, "Utils.bytesToHexString(fullSwitchTurnOffPacket): "
+					+ Utils.bytesToHexString(fullSwitchTurnOffPacket));
+			Logger.d(TAG, "BEFORE: driver.send(fullSwitchTurnOffPacket)");
+			driver.send(fullSwitchTurnOffPacket);
+			Logger.d(TAG, "AFTER: driver.send(fullSwitchTurnOffPacket)");
+
+		} else {
+			// Generate the SYS_EX message relative to the RPC
+			MessageSYS_EX msg = new MessageSYS_EX(rpc);
+			for (int i = 0; i < msg.getSubTelNum(); i++) {
+				byte[] telegram = (byte[]) msg.getTelegrams().get(i);
+				driver.send(telegram);
+			}
 		}
 	}
 
