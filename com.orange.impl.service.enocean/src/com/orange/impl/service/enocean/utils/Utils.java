@@ -238,6 +238,18 @@ public class Utils {
 	}
 
 	/**
+	 * @param b
+	 * @return byteToHexString
+	 */
+	public static String byteToHexString(byte b) {
+		char[] hexChar = new char[2];
+		int v = b & 0xFF;
+		hexChar[0] = hexArray[v >>> 4];
+		hexChar[1] = hexArray[v & 0x0F];
+		return new String(hexChar);
+	}
+
+	/**
 	 * @param bytes
 	 * @param offset
 	 * @param len
