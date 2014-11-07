@@ -66,8 +66,11 @@ public class MiscCommand {
 					int j = 0;
 					while (j < pks.length) {
 						Logger.print("pks[" + j + "]: " + pks[j]
-								+ ", event.getProperty(" + pks[j] + "): "
+								+ ", sr.getProperty(" + pks[j] + "): "
 								+ sr.getProperty(pks[j]));
+						Logger.print("sr.getProperty(" + pks[j]
+								+ ").getClass().getName()"
+								+ sr.getProperty(pks[j]).getClass().getName());
 						j = j + 1;
 					}
 					i = i + 1;
