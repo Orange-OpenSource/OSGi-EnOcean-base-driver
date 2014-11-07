@@ -23,6 +23,7 @@
 
 package com.orange.sample.enocean.client;
 
+import java.util.Dictionary;
 import java.util.Hashtable;
 
 import org.osgi.framework.BundleActivator;
@@ -34,6 +35,7 @@ import org.osgi.service.enocean.EnOceanDevice;
 import org.osgi.service.enocean.EnOceanEvent;
 import org.osgi.service.enocean.EnOceanMessage;
 import org.osgi.service.event.Event;
+import org.osgi.service.event.EventAdmin;
 import org.osgi.service.event.EventHandler;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
@@ -190,7 +192,7 @@ public class Activator implements BundleActivator, ServiceTrackerCustomizer,
 				// Logger.print("AFTER invoking...");
 
 				i = i + 1;
-				
+
 				// // Let's create an enoceanrpc in order to turn on the plug.
 				// EnOceanRPC turnOnRpc = new EnOceanRPC() {
 				// private int senderId = 0x0180abb8;
@@ -231,7 +233,7 @@ public class Activator implements BundleActivator, ServiceTrackerCustomizer,
 				// Logger.print("BEFORE invoking...");
 				// eod.invoke(turnOnRpc, handlerTurnOnRpc);
 				// Logger.print("AFTER invoking...");
-				
+
 			}
 		}
 
@@ -244,6 +246,15 @@ public class Activator implements BundleActivator, ServiceTrackerCustomizer,
 				"ap", "on", "of", "apb", "onb", "ofb" });
 		bc.registerService(MiscCommand.class.getName(), new MiscCommand(bc),
 				props);
+
+		// eventAdmin
+		ServiceReference eventAdminRef = bundleContext
+				.getServiceReference(EventAdmin.class.getName());
+		if (eventAdminRef != null) {
+			eventAdmin = (EventAdmin) bundleContext.getService(eventAdminRef);
+		} else {
+			Logger.print("No event admin service.");
+		}
 
 		System.out
 				.println("OUT: com.orange.sample.enocean.client.Activator.start(bc: "
@@ -417,29 +428,59 @@ public class Activator implements BundleActivator, ServiceTrackerCustomizer,
 				int statusInHexAsAsAnInt = statusInHexAsAByte & 0xff;
 				Logger.print("statusInHexAsAsAnInt: " + statusInHexAsAsAnInt);
 
-				if ((new Integer(0x30).byteValue() & 0xff) == statusInHexAsAsAnInt) {
-					Logger.print("Here, a button has been pressed.");
-					if ((new Integer(0x30).byteValue() & 0xff) == dataDB0InHexAsAnInt) {
-						// Check if A0 button has been pressed --> 0x30
-						Logger.print("A0");
+				if ("'0x018c0874'".equals(displayId)) {
+					// Crapy hardcoded case in order to handle the Eltako FRW-WS
+					// smoke detector.
+					// Its constructor Eltako just confirmed that its smoke
+					// detector acts as a switch/button...
+					Logger.print("This is the Eltako FRW-WS smoke detector with id 0x018c0874");
+					// cf.
+					// http://www.eltako.com/fileadmin/downloads/fr/katalog/eltako_funk_KapT_franz.pdf
+					// page 7,
+					// FRW
+					// ORG = 0x05
+					// Data_byte3 = 0x10 = alarme
+					// 0x00 = fin d'alarme
+					// 0x30 = tension de batterie < 7,2 V
+					if ((new Integer(0x00).byteValue() & 0xff) == dataDB0InHexAsAnInt) {
+						// No Alarm
+						Logger.print("No ALARM");
+						reportNormalSituation();
 					} else if ((new Integer(0x10).byteValue() & 0xff) == dataDB0InHexAsAnInt) {
-						// Check if AI button has been pressed --> 0x10
-						Logger.print("AI");
+						// Alarm
+						Logger.print("ALARM");
+						reportFire();
 					} else if ((new Integer(0x70).byteValue() & 0xff) == dataDB0InHexAsAnInt) {
-						// Check if A0 button has been pressed --> 0x70
-						Logger.print("B0");
-					} else if ((new Integer(0x50).byteValue() & 0xff) == dataDB0InHexAsAnInt) {
-						// Check if A0 button has been pressed --> 0x50
-						Logger.print("BI");
+						Logger.print("LOW BATTERY < 7,2 Volts");
 					} else {
 						Logger.print("The given Data DB_0 is UNKNOWN; its value is: "
 								+ dataDB0InHexAsAnInt);
 					}
-				} else if ((new Integer(0x20).byteValue() & 0xff) == statusInHexAsAsAnInt) {
-					Logger.print("Here, a button has been released (normally, this button was the pressed one.)");
 				} else {
-					Logger.print("The given status field of this RPS telegram is UNKNOWN. This status was (as an int): "
-							+ statusInHexAsAsAnInt);
+					if ((new Integer(0x30).byteValue() & 0xff) == statusInHexAsAsAnInt) {
+						Logger.print("Here, a button has been pressed.");
+						if ((new Integer(0x30).byteValue() & 0xff) == dataDB0InHexAsAnInt) {
+							// Check if A0 button has been pressed --> 0x30
+							Logger.print("A0");
+						} else if ((new Integer(0x10).byteValue() & 0xff) == dataDB0InHexAsAnInt) {
+							// Check if AI button has been pressed --> 0x10
+							Logger.print("AI");
+						} else if ((new Integer(0x70).byteValue() & 0xff) == dataDB0InHexAsAnInt) {
+							// Check if A0 button has been pressed --> 0x70
+							Logger.print("B0");
+						} else if ((new Integer(0x50).byteValue() & 0xff) == dataDB0InHexAsAnInt) {
+							// Check if A0 button has been pressed --> 0x50
+							Logger.print("BI");
+						} else {
+							Logger.print("The given Data DB_0 is UNKNOWN; its value is: "
+									+ dataDB0InHexAsAnInt);
+						}
+					} else if ((new Integer(0x20).byteValue() & 0xff) == statusInHexAsAsAnInt) {
+						Logger.print("Here, a button has been released (normally, this button was the pressed one.)");
+					} else {
+						Logger.print("The given status field of this RPS telegram is UNKNOWN. This status was (as an int): "
+								+ statusInHexAsAsAnInt);
+					}
 				}
 			} else if ("213".equals(rorg)) {
 				// hex 0xd5 == int 213.
@@ -485,5 +526,44 @@ public class Activator implements BundleActivator, ServiceTrackerCustomizer,
 						+ "RORG is NOT equal to a5, nor f6,nor d5 (0xa5 is equal to int 165; 0xf6 -> 246, 0xd5 -> 213).");
 			}
 		}
+	}
+
+	/**
+	 * Topic used to report fire situation and normal situation. This topic is
+	 * similar as the one used by ZigBee smoke detector to report alarm.
+	 */
+	private static final String NOTIFICATION_TOPIC = "zcl/command/received/ZoneStatusChangeNotification";
+
+	/**
+	 * Property Zone Status contains long value 4452 for fire alarm and long
+	 * value 4196 for normal situation.
+	 */
+	private static final String ZONE_STATUS_PROPERTY = "Zone Status";
+
+	/**
+	 * used to report fire and normal situation
+	 */
+	private EventAdmin eventAdmin;
+
+	/**
+	 * Report fire situation on event admin.
+	 */
+	private void reportFire() {
+		Logger.print("reportFire !!!!!!!!!!!!!!!!!!!!!");
+		Dictionary properties = new Hashtable();
+		properties.put(ZONE_STATUS_PROPERTY, new Long(4452));
+		Event event = new Event(NOTIFICATION_TOPIC, properties);
+		eventAdmin.postEvent(event);
+	}
+
+	/**
+	 * Report normal situation on event admin
+	 */
+	private void reportNormalSituation() {
+		Logger.print("reportNormalSituation !!!!!!!!!!!!!!!!!!!!!");
+		Dictionary properties = new Hashtable();
+		properties.put(ZONE_STATUS_PROPERTY, new Long(4196));
+		Event event = new Event(NOTIFICATION_TOPIC, properties);
+		eventAdmin.postEvent(event);
 	}
 }
