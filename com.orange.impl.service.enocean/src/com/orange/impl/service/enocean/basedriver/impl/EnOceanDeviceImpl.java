@@ -115,9 +115,12 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 			Logger.d(
 					TAG,
 					"This is a F6-wx-yz device. FUNC, and TYPE are NOT sent by F6-wx-yz device. The system then assumes that the device is an F6-02-01.");
+
 			// friendlyName = "F6-02-01";
-			friendlyName = "F6-02-01 Smoke Detector";
 			// description = "Light and Blind Control - Application Style 1";
+			// TODO AAA: Remove the two lines below, and uncomment the properly
+			// two lines above.
+			friendlyName = "F6-02-01 Smoke Detector";
 			description = "Eltako FWS-WS Smoke Detector";
 		} else if ("213".equals(String.valueOf(rorg))) {
 			// hex 0xd5 == int 213.
