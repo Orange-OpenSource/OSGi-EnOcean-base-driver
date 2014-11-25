@@ -87,9 +87,9 @@ public class EnOceanBaseDriver implements EnOceanPacketListener,
 	/**
 	 * The {@link EnOceanBaseDriver} constructor initiates the connection
 	 * towards an {@link EnOceanHostImpl} device. Then it registers itself as a
-	 * service listener for any {@link EnOceanDevice}, {@link EnOceanMessage} ,
-	 * {@link EnOceanRPCDescriptionSet}, {@link EnOceanChannelDescriptionSet}
-	 * that would be registered in the framework.
+	 * service listener for any {@link EnOceanDevice}, {@link EnOceanMessage},
+	 * {@link EnOceanChannelDescriptionSet} that would be registered in the
+	 * framework.
 	 * 
 	 * @param bundleContext
 	 */
