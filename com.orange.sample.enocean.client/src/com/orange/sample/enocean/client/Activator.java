@@ -456,6 +456,29 @@ public class Activator implements BundleActivator, ServiceTrackerCustomizer,
 						Logger.print("The given Data DB_0 is UNKNOWN; its value is: "
 								+ dataDB0InHexAsAnInt);
 					}
+				} else if ("'0x01819912'".equals(displayId)) {
+					// Crapy hardcoded case in order to handle the AfrisoLab
+					// WaterSensor eco.
+					// This device uses a PTM330, and follow the EnOcean's
+					// F6-05-01 EEP profile.
+					Logger.print("This is the AfrisoLab Watersensor eco with id 0x01819912");
+					if ((new Integer(0x11).byteValue() & 0xff) == dataDB0InHexAsAnInt) {
+						if ((new Integer(0x20).byteValue() & 0xff) == statusInHexAsAsAnInt) {
+							// No Alarm
+							Logger.print("No ALARM");
+							reportNormalSituation();
+						} else if ((new Integer(0x30).byteValue() & 0xff) == statusInHexAsAsAnInt) {
+							// Alarm
+							Logger.print("ALARM");
+							reportFire();
+						} else {
+							Logger.print("The given Data DB_6 is UNKNOWN; its value is: "
+									+ statusInHexAsAsAnInt);
+						}
+					} else {
+						Logger.print("The given Data DB_0 is UNKNOWN; its value is: "
+								+ dataDB0InHexAsAnInt);
+					}
 				} else {
 					if ((new Integer(0x30).byteValue() & 0xff) == statusInHexAsAsAnInt) {
 						Logger.print("Here, a button has been pressed.");

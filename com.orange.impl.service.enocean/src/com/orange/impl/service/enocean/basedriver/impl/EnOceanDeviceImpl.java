@@ -118,10 +118,20 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 
 			// friendlyName = "F6-02-01";
 			// description = "Light and Blind Control - Application Style 1";
-			// TODO AAA: Remove the two lines below, and uncomment the properly
+			// TODO AAA: Remove the lines below, and uncomment the properly
 			// two lines above.
-			friendlyName = "F6-02-01 Smoke Detector";
-			description = "Eltako FWS-WS Smoke Detector";
+			if (uid == 25954420) {
+				// 0x018c0874 <=> 25954420 in int.
+				friendlyName = "F6 Smoke Detector";
+				description = "Eltako FWS-WS Smoke Detector";
+			} else if (uid == 25270546) {
+				// 0x01819912 <=> 25270546 in int.
+				friendlyName = "F6-05-01 Liquid Leakage Sensor (mechanic energy harvester)";
+				description = "AfrisoLab WaterSensor eco";
+			} else {
+				friendlyName = "F6-02-01";
+				description = "Light and Blind Control - Application Style 1";
+			}
 		} else if ("213".equals(String.valueOf(rorg))) {
 			// hex 0xd5 == int 213.
 			Logger.d(
