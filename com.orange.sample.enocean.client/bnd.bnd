@@ -1,18 +1,17 @@
 # Set javac settings from JDT prefs
 -include: ${build}/eclipse/jdt.bnd
 
-Bundle-Vendor				= Orange
 Bundle-Activator			= com.orange.sample.enocean.client.Activator
 Bundle-Description			= A sample app that demonstrates EnOcean calpabilities.
-
 Bundle-RequiredExecutionEnvironment = OSGi/Minimum-1.1
+Bundle-Vendor				= Orange
+
+Private-Package:${p}.*;-split-package:=first
 
 -buildpath:  \
 	osgi.core;version=4.2,\
 	osgi.cmpn;version=4.2,\
 	org.osgi.service.enocean;version=latest,\
 	ee.minimum;version=1.2
-
-Private-Package:${p}.*;-split-package:=first
 
 -noee=true
