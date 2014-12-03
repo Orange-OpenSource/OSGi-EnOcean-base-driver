@@ -162,12 +162,12 @@ public class EnOceanBaseDriver implements EnOceanPacketListener,
 				TAG,
 				"radioPacketReceived(byte[] data - the data, and the optional data parts of an EnOcean packet/telegram: "
 						+ data + ")");
-		Logger.d(TAG, "data[0]: " + data[0]);
 		// The following line prints, for example for a 1BS telegram,
 		// [DEBUG-EnOceanBaseDriver] data: d500008a92390001ffffffff3000
 		Logger.d(TAG, "data: " + Utils.bytesToHexString(data));
 		Message msg;
 		// First, determine if teach-in and eventually create a device.
+		Logger.d(TAG, "data[0]: " + data[0]);
 		switch (data[0]) {
 		case Message.MESSAGE_4BS:
 			// TODO Here parameter data does NOT contain the full telegram as

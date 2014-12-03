@@ -11,7 +11,7 @@ Private-Package:${p}.*;-split-package:=first
 -buildpath:  \
 	osgi.core;version=4.2,\
 	osgi.cmpn;version=4.2,\
-	org.osgi.service.enocean;version=latest,\
-	ee.minimum;version=1.2
+	ee.minimum;version=1.2,\
+	org.osgi.service.enocean;version=latest
 
 -noee=true
