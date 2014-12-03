@@ -93,6 +93,7 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 		props.put(EnOceanDevice.RORG, String.valueOf(rorg));
 		String friendlyName = null;
 		String description = null;
+
 		if ("165".equals(String.valueOf(rorg))) {
 			// hex 0xa5 == int 165.
 			if ("2".equals(String.valueOf(func))) {
@@ -151,6 +152,18 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 					friendlyName = "D2-01-yz";
 					description = "Not handled";
 				}
+			} else if ("160".equals(String.valueOf(func))) {
+				// hex 0xa0 == int 160.
+				if ("1".equals(String.valueOf(type))) {
+					// hex 0x01 == int 1.
+					Logger.d(TAG, "This is a D2-A0-01 device.");
+					friendlyName = "D2-A0-01";
+					description = "AfrisoLab WaterControl 01";
+				} else {
+					Logger.d(TAG, "This is a D2-01-yz device.");
+					friendlyName = "D2-01-yz";
+					description = "Not handled";
+				}
 			} else {
 				Logger.d(TAG, "This is a D2-wx-yz device.");
 				friendlyName = "D2-wx-yz";
@@ -164,8 +177,14 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 							+ ", i.e. neither an A5-02-05 device, nor a F6-wx-yz device, nor a D5-wx-yz device. "
 							+ "RORG is NOT equal to a5, nor f6,nor d5 (0xa5 is equal to int 165; 0xf6 -> 246, 0xd5 -> 213).");
 		}
+
+		// If the EEP is not handle, then friendlyName is null, here.
+		// So Properties.put(..., ...) will throw a NullPointerException.
 		props.put("DEVICE_FRIENDLY_NAME", friendlyName);
+		// If the EEP is not handle, then description is null, here.
+		// So Properties.put(..., ...) will throw a NullPointerException.
 		props.put(Constants.DEVICE_DESCRIPTION, description);
+
 		props.put(Constants.DEVICE_SERIAL, String.valueOf(uid));
 		props.put("service.pid", String.valueOf(uid));
 		sReg = this.bc.registerService(EnOceanDevice.class.getName(), this,
