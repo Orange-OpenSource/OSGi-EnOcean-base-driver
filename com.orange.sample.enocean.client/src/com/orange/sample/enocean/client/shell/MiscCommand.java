@@ -250,7 +250,8 @@ public class MiscCommand {
 	}
 
 	/**
-	 * send a EnOcean packet as PTM210 in order to appair with the plug.
+	 * send a EnOcean packet as PTM210 in order to appair with the plug, or
+	 * WaterControl.
 	 */
 	public void apb() {
 		// 55 00 07 07 01 7A F6 50 00 29 21 9F 30 01 FF FF FF FF 31 00 37
@@ -305,14 +306,16 @@ public class MiscCommand {
 	}
 
 	/**
-	 * send a EnOcean packet as PTM210 in order to turn on the plug.
+	 * send a EnOcean packet as PTM210 in order to turn on the plug, or
+	 * WaterControl.
 	 */
 	public void onb() {
 		apb();
 	}
 
 	/**
-	 * send a EnOcean packet as PTM210 in order to turn off the plug.
+	 * send a EnOcean packet as PTM210 in order to turn off the plug, or
+	 * WaterControl.
 	 */
 	public void ofb() {
 		// 55 00 07 07 01 7A F6 70 00 29 21 9F 30 01 FF FF FF FF 2D 00 62

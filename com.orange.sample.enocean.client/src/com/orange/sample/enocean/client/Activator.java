@@ -456,12 +456,14 @@ public class Activator implements BundleActivator, ServiceTrackerCustomizer,
 						Logger.print("The given Data DB_0 is UNKNOWN; its value is: "
 								+ dataDB0InHexAsAnInt);
 					}
-				} else if ("'0x01819912'".equals(displayId)) {
+				} else if (("'0x01819912'".equals(displayId))
+						|| ("'0x01819457'".equals(displayId))) {
 					// Crapy hardcoded case in order to handle the AfrisoLab
 					// WaterSensor eco.
 					// This device uses a PTM330, and follow the EnOcean's
 					// F6-05-01 EEP profile.
-					Logger.print("This is the AfrisoLab Watersensor eco with id 0x01819912");
+					Logger.print("This is the AfrisoLab Watersensor eco with id: "
+							+ displayId);
 					if ((new Integer(0x11).byteValue() & 0xff) == dataDB0InHexAsAnInt) {
 						if ((new Integer(0x20).byteValue() & 0xff) == statusInHexAsAsAnInt) {
 							// No Alarm
@@ -572,7 +574,7 @@ public class Activator implements BundleActivator, ServiceTrackerCustomizer,
 	 * Report fire situation on event admin.
 	 */
 	private void reportFire() {
-		Logger.print("reportFire !!!!!!!!!!!!!!!!!!!!!");
+		Logger.print("reportAlarmSituation !!!!!");
 		Dictionary properties = new Hashtable();
 		properties.put(ZONE_STATUS_PROPERTY, new Long(4452));
 		Event event = new Event(NOTIFICATION_TOPIC, properties);
@@ -583,7 +585,7 @@ public class Activator implements BundleActivator, ServiceTrackerCustomizer,
 	 * Report normal situation on event admin
 	 */
 	private void reportNormalSituation() {
-		Logger.print("reportNormalSituation !!!!!!!!!!!!!!!!!!!!!");
+		Logger.print("reportNormalSituation !!!!!");
 		Dictionary properties = new Hashtable();
 		properties.put(ZONE_STATUS_PROPERTY, new Long(4196));
 		Event event = new Event(NOTIFICATION_TOPIC, properties);
