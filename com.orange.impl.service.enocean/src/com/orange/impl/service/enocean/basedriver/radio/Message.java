@@ -51,7 +51,7 @@ public abstract class Message implements EnOceanMessage {
 	 */
 	public static final byte MESSAGE_UTE = (byte) 0xD4;
 
-	private byte RORG;
+	private byte rorg;
 	private byte[] data;
 	private byte[] senderId;
 	private byte status;
@@ -80,6 +80,17 @@ public abstract class Message implements EnOceanMessage {
 	 *            is d500008a92390001ffffffff3000
 	 */
 	public Message(byte[] data) {
+		System.out.println("////////////////////////////Message(byte[] data: "
+				+ data);
+		System.out.println("////////////////////////////data.length: "
+				+ data.length);
+
+		int i = 0;
+		while (i < data.length) {
+			System.out.println("////data[" + i + "]: " + data[i]);
+			i = i + 1;
+		}
+
 		this.messageBytes = data;
 		setRORG(data[0]);
 		setPayloadBytes(Utils.byteRange(data, 1, data.length - 6 - 7));
@@ -96,7 +107,7 @@ public abstract class Message implements EnOceanMessage {
 	}
 
 	public String toString() {
-		byte[] out = Utils.byteConcat(RORG, data);
+		byte[] out = Utils.byteConcat(this.rorg, data);
 		out = Utils.byteConcat(out, senderId);
 		out = Utils.byteConcat(out, status);
 		return Utils.bytesToHexString(out);
@@ -106,14 +117,14 @@ public abstract class Message implements EnOceanMessage {
 	 * The message's RadioTelegram Type
 	 */
 	public int getRorg() {
-		return (RORG & 0xff);
+		return (this.rorg & 0xff);
 	}
 
 	/**
 	 * @param rorg
 	 */
 	public void setRORG(int rorg) {
-		RORG = (byte) (rorg & 0xff);
+		this.rorg = (byte) (rorg & 0xff);
 	}
 
 	public byte[] getBytes() {
@@ -196,22 +207,22 @@ public abstract class Message implements EnOceanMessage {
 	 * @param func
 	 */
 	public void setFunc(int func) {
-		this.func = (byte) func;
+		this.func = (byte) (func & 0xff);
 	}
 
 	public int getFunc() {
-		return func;
+		return (this.func & 0xff);
 	}
 
 	/**
 	 * @param type
 	 */
 	public void setType(int type) {
-		this.type = (byte) type;
+		this.type = (byte) (type & 0xff);
 	}
 
 	public int getType() {
-		return type;
+		return (this.type & 0xff);
 	}
 
 	public byte[] getPayloadBytes() {

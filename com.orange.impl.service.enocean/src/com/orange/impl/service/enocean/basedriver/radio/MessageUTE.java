@@ -35,9 +35,12 @@ public class MessageUTE extends Message {
 	/**
 	 * TAG
 	 */
-	public static final String TAG = "Message1BS";
+	public static final String TAG = "MessageUTE";
 
 	/**
+	 * See section 3.6) UTE - Universal Uni- and Bidirectional Teach-in, page
+	 * 167 of EnOcean_Equipment_Profiles_EEP_V2.61_public.pdf
+	 * 
 	 * @param data
 	 *            , i.e the data, and the optional data parts of an EnOcean
 	 *            packet/telegram (see, section "1.6.1 Packet description", page
@@ -58,9 +61,9 @@ public class MessageUTE extends Message {
 
 		// RORG UTE is D4, but here, the RORG of the profile is
 		// getPayloadBytes()[0]: d2
-		setRORG(getPayloadBytes()[0]);
-		setFunc(getPayloadBytes()[1]);
-		setType(getPayloadBytes()[2]);
+		setRORG(getPayloadBytes()[6]);
+		setFunc(getPayloadBytes()[5]);
+		setType(getPayloadBytes()[4]);
 	}
 
 	public boolean isTeachin() {
