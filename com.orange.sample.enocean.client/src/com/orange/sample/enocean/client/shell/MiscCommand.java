@@ -45,7 +45,7 @@ public class MiscCommand {
 	}
 
 	/**
-	 * display all the services.
+	 * Display all the services.
 	 */
 	public void ds() {
 		System.out.println("This ds command displays all the services.");
@@ -82,7 +82,7 @@ public class MiscCommand {
 	}
 
 	/**
-	 * send a EnOcean packet in order to appair with the plug.
+	 * Send a EnOcean packet in order to appair with the plug.
 	 */
 	public void ap() {
 		// 55 00 0D 07 01 FD D4 D2 01 08 00 3E FF 91 00 00 00 00 00 03 01 85 64
@@ -138,7 +138,7 @@ public class MiscCommand {
 	}
 
 	/**
-	 * send a EnOcean packet in order to turn on the plug.
+	 * Send a EnOcean packet in order to turn on the plug.
 	 */
 	public void on() {
 		// 55 00 09 07 01 56 D2 01 00 01 00 00 00 00 00 03 01 85 64 14 FF 00 64
@@ -194,7 +194,7 @@ public class MiscCommand {
 	}
 
 	/**
-	 * send a EnOcean packet in order to turn off the plug.
+	 * Send a EnOcean packet in order to turn off the plug.
 	 */
 	public void of() {
 		// 55 00 09 07 01 56 D2 01 00 00 00 00 00 00 00 03 01 85 64 14 FF 00 F0
@@ -250,7 +250,7 @@ public class MiscCommand {
 	}
 
 	/**
-	 * send a EnOcean packet as PTM210 in order to appair with the plug, or
+	 * Send a EnOcean packet as PTM210 in order to appair with the plug, or
 	 * WaterControl.
 	 */
 	public void apb() {
@@ -306,7 +306,7 @@ public class MiscCommand {
 	}
 
 	/**
-	 * send a EnOcean packet as PTM210 in order to turn on the plug, or
+	 * Send a EnOcean packet as PTM210 in order to turn on the plug, or
 	 * WaterControl.
 	 */
 	public void onb() {
@@ -314,7 +314,7 @@ public class MiscCommand {
 	}
 
 	/**
-	 * send a EnOcean packet as PTM210 in order to turn off the plug, or
+	 * Send a EnOcean packet as PTM210 in order to turn off the plug, or
 	 * WaterControl.
 	 */
 	public void ofb() {
@@ -367,7 +367,6 @@ public class MiscCommand {
 			eod.invoke(appairRPC, handlerTurnOnRpc);
 			Logger.print("AFTER invoking...");
 		}
-
 	}
 
 	/**

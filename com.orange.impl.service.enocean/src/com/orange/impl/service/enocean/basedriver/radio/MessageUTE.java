@@ -54,7 +54,9 @@ public class MessageUTE extends Message {
 		Logger.d(TAG, "getPayloadBytes(): " + getPayloadBytes());
 		int i = 0;
 		while (i < getPayloadBytes().length) {
-			Logger.d(TAG, "getPayloadBytes()[" + i + "]: "
+			Logger.d(
+					TAG,
+					"getPayloadBytes()[" + i + "]: "
 							+ Utils.byteToHexString(getPayloadBytes()[i]));
 			i = i + 1;
 		}
