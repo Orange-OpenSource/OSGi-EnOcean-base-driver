@@ -31,6 +31,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.device.Constants;
 import org.osgi.service.enocean.EnOceanDevice;
 import org.osgi.service.enocean.EnOceanEvent;
 import org.osgi.service.enocean.EnOceanMessage;
@@ -53,6 +54,8 @@ public class Activator implements BundleActivator, ServiceTrackerCustomizer,
 	private ServiceTracker deviceTracker;
 	private ServiceRegistration deviceEventSubscription;
 	private BundleContext bc;
+
+	private boolean alarmIsActive = false;
 
 	public void start(BundleContext bundleContext)
 			throws InvalidSyntaxException {
@@ -445,11 +448,11 @@ public class Activator implements BundleActivator, ServiceTrackerCustomizer,
 					if ((new Integer(0x00).byteValue() & 0xff) == dataDB0InHexAsAnInt) {
 						// No Alarm
 						Logger.print("No ALARM");
-						reportNormalSituation();
+						reportFireNormalSituation();
 					} else if ((new Integer(0x10).byteValue() & 0xff) == dataDB0InHexAsAnInt) {
 						// Alarm
 						Logger.print("ALARM");
-						reportFire();
+						reportFire(displayId);
 					} else if ((new Integer(0x70).byteValue() & 0xff) == dataDB0InHexAsAnInt) {
 						Logger.print("LOW BATTERY < 7,2 Volts");
 					} else {
@@ -468,11 +471,11 @@ public class Activator implements BundleActivator, ServiceTrackerCustomizer,
 						if ((new Integer(0x20).byteValue() & 0xff) == statusInHexAsAsAnInt) {
 							// No Alarm
 							Logger.print("No ALARM");
-							reportNormalSituation();
+							reportWaterNormalSituation();
 						} else if ((new Integer(0x30).byteValue() & 0xff) == statusInHexAsAsAnInt) {
 							// Alarm
 							Logger.print("ALARM");
-							reportFire();
+							reportWater(displayId);
 						} else {
 							Logger.print("The given Data DB_6 is UNKNOWN; its value is: "
 									+ statusInHexAsAsAnInt);
@@ -496,12 +499,26 @@ public class Activator implements BundleActivator, ServiceTrackerCustomizer,
 						} else if ((new Integer(0x50).byteValue() & 0xff) == dataDB0InHexAsAnInt) {
 							// Check if A0 button has been pressed --> 0x50
 							Logger.print("BI");
+							// The switch is used to simulate the smoke
+							// detector.
+							// Alarm
+							Logger.print("ALARM");
+							reportFire(displayId);
+							alarmIsActive = true;
 						} else {
 							Logger.print("The given Data DB_0 is UNKNOWN; its value is: "
 									+ dataDB0InHexAsAnInt);
 						}
 					} else if ((new Integer(0x20).byteValue() & 0xff) == statusInHexAsAsAnInt) {
 						Logger.print("Here, a button has been released (normally, this button was the pressed one.)");
+						if (alarmIsActive) {
+							// The switch is used to simulate the smoke
+							// detector.
+							// No Alarm
+							Logger.print("No ALARM");
+							reportFireNormalSituation();
+							alarmIsActive = false;
+						}
 					} else {
 						Logger.print("The given status field of this RPS telegram is UNKNOWN. This status was (as an int): "
 								+ statusInHexAsAsAnInt);
@@ -566,29 +583,70 @@ public class Activator implements BundleActivator, ServiceTrackerCustomizer,
 	private static final String ZONE_STATUS_PROPERTY = "Zone Status";
 
 	/**
+	 * Topic used to report water situation and normal situation.
+	 */
+	private static final String WATERALARM_NOTIFICATION_TOPIC = "wateralarm/notif";
+
+	/**
+	 * Property Zone Status contains long value 4452 for fire alarm and long
+	 * value 4196 for normal situation.
+	 */
+	private static final String WATERALARM_PROPERTY = "WATERALARM";
+
+	/**
 	 * used to report fire and normal situation
 	 */
 	private EventAdmin eventAdmin;
 
 	/**
 	 * Report fire situation on event admin.
+	 * 
+	 * @param deviceSerial
+	 *            , i.e. the device EnOcean Id: 0x........
 	 */
-	private void reportFire() {
+	private void reportFire(String deviceSerial) {
 		Logger.print("reportAlarmSituation !!!!!");
 		Dictionary properties = new Hashtable();
 		properties.put(ZONE_STATUS_PROPERTY, new Long(4452));
+		properties.put(Constants.DEVICE_SERIAL, deviceSerial);
 		Event event = new Event(NOTIFICATION_TOPIC, properties);
 		eventAdmin.postEvent(event);
 	}
 
 	/**
-	 * Report normal situation on event admin
+	 * Report fire normal situation on event admin
 	 */
-	private void reportNormalSituation() {
-		Logger.print("reportNormalSituation !!!!!");
+	private void reportFireNormalSituation() {
+		Logger.print("reportFireNormalSituation !!!!!");
 		Dictionary properties = new Hashtable();
 		properties.put(ZONE_STATUS_PROPERTY, new Long(4196));
 		Event event = new Event(NOTIFICATION_TOPIC, properties);
+		eventAdmin.postEvent(event);
+	}
+
+	/**
+	 * Report water situation on event admin.
+	 * 
+	 * @param deviceSerial
+	 *            , i.e. the device EnOcean Id: 0x........
+	 */
+	private void reportWater(String deviceSerial) {
+		Logger.print("reportWaterAlarmSituation !!!!!");
+		Dictionary properties = new Hashtable();
+		properties.put(WATERALARM_PROPERTY, new Long(4452));
+		properties.put(Constants.DEVICE_SERIAL, deviceSerial);
+		Event event = new Event(WATERALARM_NOTIFICATION_TOPIC, properties);
+		eventAdmin.postEvent(event);
+	}
+
+	/**
+	 * Report water normal situation on event admin
+	 */
+	private void reportWaterNormalSituation() {
+		Logger.print("reportWaterNormalSituation !!!!!");
+		Dictionary properties = new Hashtable();
+		properties.put(WATERALARM_PROPERTY, new Long(4196));
+		Event event = new Event(WATERALARM_NOTIFICATION_TOPIC, properties);
 		eventAdmin.postEvent(event);
 	}
 }
