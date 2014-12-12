@@ -53,19 +53,17 @@ Quick Start
 g! lb
 START LEVEL 1
    ID|State      |Level|Name
-    0|Active     |    0|System Bundle (4.4.1) - System Bundle
-    1|Active     |    1|com.orange.sample.enocean.client (0.0.0) - com.orange.sample.enocean.client.jar
-    2|Active     |    1|Apache Felix Bundle Repository (2.0.2) - org.apache.felix.bundlerepository-2.0.2.jar
-    3|Active     |    1|Apache Felix EventAdmin (1.3.2) - org.apache.felix.eventadmin-1.3.2.jar
-    4|Active     |    1|Apache Felix Gogo Command (0.14.0) - org.apache.felix.gogo.command-0.14.0.jar
-    5|Active     |    1|Apache Felix Gogo Runtime (0.12.1) - org.apache.felix.gogo.runtime-0.12.1.jar
-    6|Active     |    1|Apache Felix Gogo Shell (0.10.0) - org.apache.felix.gogo.shell-0.10.0.jar
-    7|Active     |    1|Apache Felix Log Service (1.0.1) - org.apache.felix.log-1.0.1.jar
-    8|Active     |    1|com.orange.impl.service.enocean (0.0.0) - com.orange.impl.service.enocean.jar
-    9|Active     |    1|org.osgi.service.enocean (6.0.0.201407091519) - org.osgi.service.enocean-6.0.0.jar
-   10|Active     |    1|org.osgi.test.cases.enoceansimulation (6.0.0.201407091522) - org.osgi.test.cases.enoceansimulation-6.0.0.jar
-   11|Active     |    1|osgi.cmpn (4.2.0.200908310645) - osgi.cmpn-4.2.0.jar
-   12|Active     |    1|driver-rx-tx (0.0.0) - driver-rx-tx.jar
+    0|Active     |    0|System Bundle (4.4.1)
+    1|Active     |    1|com.orange.impl.service.enocean (1.0.0)
+    2|Active     |    1|com.orange.sample.enocean.client (0.0.0)
+    3|Active     |    1|Apache Felix Bundle Repository (2.0.2)
+    4|Active     |    1|Apache Felix EventAdmin (1.3.2)
+    5|Active     |    1|Apache Felix Gogo Command (0.14.0)
+    6|Active     |    1|Apache Felix Gogo Runtime (0.12.1)
+    7|Active     |    1|Apache Felix Gogo Shell (0.10.0)
+    8|Active     |    1|org.osgi:org.osgi.service.enocean (1.0.0.201411261443)
+    9|Active     |    1|osgi.cmpn (4.2.0.200908310645)
+   10|Active     |    1|driver-rx-tx (0.0.0) - driver-rx-tx.jar
 
 ```
 * Start Felix.
