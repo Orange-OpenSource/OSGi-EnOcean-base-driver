@@ -123,12 +123,12 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 			// two lines above.
 			if (uid == 25954420) {
 				// 0x018c0874 <=> 25954420 in int.
-				friendlyName = "F6 Smoke Detector";
-				description = "Eltako FWS-WS Smoke Detector";
+				friendlyName = "Eltako Smoke Detector";
+				description = "(F6)";
 			} else if (uid == 25270546) {
 				// 0x01819912 <=> 25270546 in int.
-				friendlyName = "F6-05-01 Liquid Leakage Sensor (mechanic energy harvester)";
-				description = "AfrisoLab WaterSensor eco";
+				friendlyName = "AfrisoLab Water Sensor";
+				description = "Liquid Leakage Sensor (mechanic energy harvester) (F6-05-01)";
 			} else {
 				friendlyName = "F6-02-01";
 				description = "Light and Blind Control - Application Style 1";
@@ -157,8 +157,8 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 				if ("1".equals(String.valueOf(type))) {
 					// hex 0x01 == int 1.
 					Logger.d(TAG, "This is a D2-A0-01 device.");
-					friendlyName = "D2-A0-01";
-					description = "AfrisoLab WaterControl 01";
+					friendlyName = "AfrisoLab Water Valve";
+					description = "Standard Control (BI-DIR) (D2-A0-01)";
 				} else {
 					Logger.d(TAG, "This is a D2-01-yz device.");
 					friendlyName = "D2-01-yz";
