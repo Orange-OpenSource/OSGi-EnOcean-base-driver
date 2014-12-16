@@ -42,7 +42,7 @@ Authors
 
 Quick Start
 -----------
-* Get the code (e.g. in Eclipse).
+* Get the code (e.g. in Eclipse Kepler).
 * Compile it (via bnd).
 * Get Apache Felix (e.g. version 4.4.1).
 * Add the following bundles in the "bundle" folder of Felix:
