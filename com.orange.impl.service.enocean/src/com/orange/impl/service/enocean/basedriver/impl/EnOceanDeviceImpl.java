@@ -36,6 +36,8 @@ import org.osgi.service.enocean.EnOceanMessage;
 import org.osgi.service.enocean.EnOceanRPC;
 
 import com.orange.impl.service.enocean.basedriver.EnOceanBaseDriver;
+import com.orange.impl.service.enocean.basedriver.conf.ConfigurationFileManager;
+import com.orange.impl.service.enocean.basedriver.conf.RorgFuncTypeFriendlyname;
 import com.orange.impl.service.enocean.basedriver.radio.MessageSYS_EX;
 import com.orange.impl.service.enocean.utils.Logger;
 import com.orange.impl.service.enocean.utils.Utils;
@@ -83,21 +85,44 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 		Logger.d(TAG, "EnOceanDeviceImpl(bc: " + bc + ", driver: " + driver
 				+ ", uid: " + uid + ", rorg: " + rorg + ", func: " + func
 				+ ", type: " + type + ", manuf: " + manuf);
+				
 		this.bc = bc;
 		this.driver = driver;
 		this.chip_id = uid;
 		props = new Properties();
 		props.put(Constants.DEVICE_CATEGORY,
 				new String[] { EnOceanDevice.DEVICE_CATEGORY });
-		props.put(EnOceanDevice.CHIP_ID, String.valueOf(uid));
+		props.put(EnOceanDevice.CHIP_ID, String.valueOf(this.chip_id));
 		props.put(EnOceanDevice.RORG, String.valueOf(rorg));
 		String friendlyName = null;
 		String description = null;
+		
+		// Check if something is defined in the config file
+		RorgFuncTypeFriendlyname rFTF = ConfigurationFileManager
+					.getRorgFuncTypeAndFriendlynameFromConfigFile("0x"
+							+ Utils.bytesToHexString(Utils
+									.intTo4Bytes(305419896)));
+
+		int correctedFunc = func;
+		int correctedType = type;
+		if (rFTF != null) {
+			// The given rorg, and the rFTF.getRorg() may be checked.
+			Logger.d(TAG, "The device with uid: " + uid
+					+ " appears in the config file; rFTF: " + rFTF);
+			friendlyName = rFTF.getFriendlyname();
+			correctedFunc = Integer.parseInt(rFTF.getFunc());
+			props.put(EnOceanDevice.FUNC, correctedFunc);
+			correctedType = Integer.parseInt(rFTF.getType());
+			props.put(EnOceanDevice.TYPE, correctedType);
+		} else {
+			Logger.d(TAG, "The device with uid: " + uid
+					+ " does NOT appear in the config file; rFTF: " + rFTF);
+		}
 
 		if ("165".equals(String.valueOf(rorg))) {
 			// hex 0xa5 == int 165.
-			if ("2".equals(String.valueOf(func))) {
-				if ("5".equals(String.valueOf(type))) {
+			if ("2".equals(String.valueOf(correctedFunc))) {
+				if ("5".equals(String.valueOf(correctedType))) {
 					Logger.d(TAG, "This is an A5-02-05 device.");
 					friendlyName = "A5-02-05";
 					description = "Temperature Sensor Range 0°C to +40°C";
@@ -121,11 +146,11 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 			// description = "Light and Blind Control - Application Style 1";
 			// TODO AAA: Remove the lines below, and uncomment the properly
 			// two lines above.
-			if (uid == 25954420) {
+			if (this.chip_id == 25954420) {
 				// 0x018c0874 <=> 25954420 in int.
 				friendlyName = "Eltako Smoke Detector";
 				description = "(F6)";
-			} else if (uid == 25270546) {
+			} else if (this.chip_id == 25270546) {
 				// 0x01819912 <=> 25270546 in int.
 				friendlyName = "AfrisoLab Water Sensor";
 				description = "Liquid Leakage Sensor (mechanic energy harvester) (F6-05-01)";
@@ -142,8 +167,8 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 			description = "Single Input Contact";
 		} else if ("210".equals(String.valueOf(rorg))) {
 			// hex 0xd2 == int 210.
-			if ("1".equals(String.valueOf(func))) {
-				if ("8".equals(String.valueOf(type))) {
+			if ("1".equals(String.valueOf(correctedFunc))) {
+				if ("8".equals(String.valueOf(correctedType))) {
 					Logger.d(TAG, "This is a D2-01-08 device.");
 					friendlyName = "D2-01-08";
 					description = "Electronic switches and dimmers with Energy Measurement and Local Control";
@@ -152,9 +177,9 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 					friendlyName = "D2-01-yz";
 					description = "Not handled";
 				}
-			} else if ("160".equals(String.valueOf(func))) {
+			} else if ("160".equals(String.valueOf(correctedFunc))) {
 				// hex 0xa0 == int 160.
-				if ("1".equals(String.valueOf(type))) {
+				if ("1".equals(String.valueOf(correctedType))) {
 					// hex 0x01 == int 1.
 					Logger.d(TAG, "This is a D2-A0-01 device.");
 					friendlyName = "AfrisoLab Water Valve";
@@ -185,14 +210,14 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 		// So Properties.put(..., ...) will throw a NullPointerException.
 		props.put(Constants.DEVICE_DESCRIPTION, description);
 
-		props.put(Constants.DEVICE_SERIAL, String.valueOf(uid));
-		props.put("service.pid", String.valueOf(uid));
+		props.put(Constants.DEVICE_SERIAL, String.valueOf(this.chip_id));
+		props.put("service.pid", String.valueOf(this.chip_id));
 		sReg = this.bc.registerService(EnOceanDevice.class.getName(), this,
 				props);
 		Logger.d(
 				TAG,
 				"registering EnOceanDevice : "
-						+ Utils.bytesToHexString(Utils.intTo4Bytes(uid)));
+						+ Utils.bytesToHexString(Utils.intTo4Bytes(this.chip_id)));
 		/* Initializations */
 		lastMessage = null;
 	}
