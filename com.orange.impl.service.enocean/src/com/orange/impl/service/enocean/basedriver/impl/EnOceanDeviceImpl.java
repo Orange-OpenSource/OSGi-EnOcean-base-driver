@@ -110,9 +110,9 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 					+ " appears in the config file; rFTF: " + rFTF);
 			friendlyName = rFTF.getFriendlyname();
 			correctedFunc = Integer.parseInt(rFTF.getFunc());
-			props.put(EnOceanDevice.FUNC, correctedFunc);
+			props.put(EnOceanDevice.FUNC, String.valueOf(correctedFunc));
 			correctedType = Integer.parseInt(rFTF.getType());
-			props.put(EnOceanDevice.TYPE, correctedType);
+			props.put(EnOceanDevice.TYPE, String.valueOf(correctedType));
 		} else {
 			Logger.d(TAG, "The device with uid: " + uid
 					+ " does NOT appear in the config file; rFTF: " + rFTF);
