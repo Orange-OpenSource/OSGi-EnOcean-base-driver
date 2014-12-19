@@ -85,7 +85,7 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 		Logger.d(TAG, "EnOceanDeviceImpl(bc: " + bc + ", driver: " + driver
 				+ ", uid: " + uid + ", rorg: " + rorg + ", func: " + func
 				+ ", type: " + type + ", manuf: " + manuf);
-				
+
 		this.bc = bc;
 		this.driver = driver;
 		this.chip_id = uid;
@@ -96,12 +96,11 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 		props.put(EnOceanDevice.RORG, String.valueOf(rorg));
 		String friendlyName = null;
 		String description = null;
-		
+
 		// Check if something is defined in the config file
 		RorgFuncTypeFriendlyname rFTF = ConfigurationFileManager
-					.getRorgFuncTypeAndFriendlynameFromConfigFile("0x"
-							+ Utils.bytesToHexString(Utils
-									.intTo4Bytes(305419896)));
+				.getRorgFuncTypeAndFriendlynameFromConfigFile("0x"
+						+ Utils.bytesToHexString(Utils.intTo4Bytes(305419896)));
 
 		int correctedFunc = func;
 		int correctedType = type;
@@ -217,7 +216,8 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 		Logger.d(
 				TAG,
 				"registering EnOceanDevice : "
-						+ Utils.bytesToHexString(Utils.intTo4Bytes(this.chip_id)));
+						+ Utils.bytesToHexString(Utils
+								.intTo4Bytes(this.chip_id)));
 		/* Initializations */
 		lastMessage = null;
 	}
