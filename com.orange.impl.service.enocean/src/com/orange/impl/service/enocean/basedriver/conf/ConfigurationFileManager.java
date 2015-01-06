@@ -56,29 +56,30 @@ public class ConfigurationFileManager {
 	}
 
 	/**
-	 * Get the RORG FUNC TYPE, and FriendlyName from the configuration file
-	 * located at: "." + File.separator + "enocean_config" + File.separator +
-	 * "enocean_config.txt". This method (re)loads the configuration file each
-	 * time. The configuration file is expected to contain lines that are in
-	 * line with the following pattern:
-	 * 0x12345678_RORG_FUNC_TYPE_FRIENDLYNAME=A1-02-01-Bla bla-bla friendly
-	 * bla-bla name ;-) where RORG, FUNC, TYPE, and Friendlyname are separated
-	 * by a "##". In the example, the Rorg is: "A1", the Func is: "02", the Type
-	 * is: "01", and the Friendlyname is:
-	 * "Bla bla-bla friendly bla-bla name ;-)". The friendly name may contain
-	 * spaces, but can not contain "##".
+	 * Get the RORG FUNC TYPE, FriendlyName, and Description from the
+	 * configuration file located at: "." + File.separator + "enocean_config" +
+	 * File.separator + "enocean_config.txt". This method (re)loads the
+	 * configuration file each time. The configuration file is expected to
+	 * contain lines that are in line with the following pattern:
+	 * 0x12345678_RORG_FUNC_TYPE_FRIENDLYNAME_DESCRIPTION=A1##02##01##Bla
+	 * bla-bla friendly bla-bla name ;-)##a desc where RORG, FUNC, TYPE,
+	 * Friendlyname, and Description are separated by a "##". In the example,
+	 * the Rorg is: "A1", the Func is: "02", the Type is: "01", the Friendlyname
+	 * is: "Bla bla-bla friendly bla-bla name ;-)", and the Description is:
+	 * "a desc". Friendly name, and Description may contain spaces, but can not
+	 * contain "##".
 	 * 
 	 * @param enOceanId
 	 *            as an hexa value written as follow, e.g. 0x12345678.
-	 * @return the associated RORG-FUNC-TYPE-FRIENDLYNAME object if present in
-	 *         the configuration file, e.g. A0 02 01 Water Sensor_45-17-62.
-	 *         Return null if nothing is associated to the given enOceanId, or
-	 *         if no configuration file is available, or if there is another
-	 *         IOException when reading the file, for example.
+	 * @return the associated RORG-FUNC-TYPE-FRIENDLYNAME-DESCRIPTION object if
+	 *         present in the configuration file, e.g. A0 02 01 Water
+	 *         Sensor_45-17-62. Return null if nothing is associated to the
+	 *         given enOceanId, or if no configuration file is available, or if
+	 *         there is another IOException when reading the file, for example.
 	 */
-	public static RorgFuncTypeFriendlyname getRorgFuncTypeAndFriendlynameFromConfigFile(
+	public static RorgFuncTypeFriendlynameDescription getRorgFuncTypeAndFriendlynameFromConfigFile(
 			String enOceanId) {
-		RorgFuncTypeFriendlyname result = null;
+		RorgFuncTypeFriendlynameDescription result = null;
 
 		// Location of the configuration file.
 		String configFilePath = "." + File.separator + "enocean_config"
@@ -108,11 +109,16 @@ public class ConfigurationFileManager {
 					System.out.println("DEBUG: Its associated value is: "
 							+ valueAssociatedToEnOceanIdKey);
 
+					// Check that valueAssociatedToEnOceanIdKey contains four
+					// "##".
+
 					// From String to RorgFuncTypeFriendlyname.
 					String rorg = null;
 					String func = null;
 					String type = null;
 					String friendlyname = null;
+					String description = null;
+
 					// Get rorg
 					int firstDashIndex = valueAssociatedToEnOceanIdKey
 							.indexOf("##");
@@ -144,13 +150,23 @@ public class ConfigurationFileManager {
 					valueAssociatedToEnOceanIdKey = valueAssociatedToEnOceanIdKey
 							.substring(thirdDashIndex + 2);
 					// Get friendlyname
-					friendlyname = valueAssociatedToEnOceanIdKey;
+					int fourthDashIndex = valueAssociatedToEnOceanIdKey
+							.indexOf("##");
+					friendlyname = valueAssociatedToEnOceanIdKey.substring(0,
+							fourthDashIndex);
 					if ("".equals(friendlyname)) {
 						friendlyname = null;
 					}
-
-					result = new RorgFuncTypeFriendlyname(rorg, func, type,
-							friendlyname);
+					valueAssociatedToEnOceanIdKey = valueAssociatedToEnOceanIdKey
+							.substring(fourthDashIndex + 2);
+					// Get description
+					description = valueAssociatedToEnOceanIdKey;
+					System.out.println("description: " + description);
+					if ("".equals(description)) {
+						description = null;
+					}
+					result = new RorgFuncTypeFriendlynameDescription(rorg,
+							func, type, friendlyname, description);
 
 					return result;
 				} else {
