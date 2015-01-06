@@ -37,7 +37,7 @@ import org.osgi.service.enocean.EnOceanRPC;
 
 import com.orange.impl.service.enocean.basedriver.EnOceanBaseDriver;
 import com.orange.impl.service.enocean.basedriver.conf.ConfigurationFileManager;
-import com.orange.impl.service.enocean.basedriver.conf.RorgFuncTypeFriendlyname;
+import com.orange.impl.service.enocean.basedriver.conf.RorgFuncTypeFriendlynameDescription;
 import com.orange.impl.service.enocean.basedriver.radio.MessageSYS_EX;
 import com.orange.impl.service.enocean.utils.Logger;
 import com.orange.impl.service.enocean.utils.Utils;
@@ -98,24 +98,25 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 		String description = null;
 
 		// Check if something is defined in the config file
-		RorgFuncTypeFriendlyname rFTF = ConfigurationFileManager
+		RorgFuncTypeFriendlynameDescription rFTFD = ConfigurationFileManager
 				.getRorgFuncTypeAndFriendlynameFromConfigFile("0x"
 						+ Utils.bytesToHexString(Utils.intTo4Bytes(305419896)));
 
 		int correctedFunc = func;
 		int correctedType = type;
-		if (rFTF != null) {
+		if (rFTFD != null) {
 			// The given rorg, and the rFTF.getRorg() may be checked.
 			Logger.d(TAG, "The device with uid: " + uid
-					+ " appears in the config file; rFTF: " + rFTF);
-			friendlyName = rFTF.getFriendlyname();
-			correctedFunc = Integer.parseInt(rFTF.getFunc());
+					+ " appears in the config file; rFTFD: " + rFTFD);
+			friendlyName = rFTFD.getFriendlyname();
+			description = rFTFD.getDescription();
+			correctedFunc = Integer.parseInt(rFTFD.getFunc());
 			props.put(EnOceanDevice.FUNC, String.valueOf(correctedFunc));
-			correctedType = Integer.parseInt(rFTF.getType());
+			correctedType = Integer.parseInt(rFTFD.getType());
 			props.put(EnOceanDevice.TYPE, String.valueOf(correctedType));
 		} else {
 			Logger.d(TAG, "The device with uid: " + uid
-					+ " does NOT appear in the config file; rFTF: " + rFTF);
+					+ " does NOT appear in the config file; rFTFD: " + rFTFD);
 		}
 
 		if ("165".equals(String.valueOf(rorg))) {
@@ -141,18 +142,12 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 					TAG,
 					"This is a F6-wx-yz device. FUNC, and TYPE are NOT sent by F6-wx-yz device. The system then assumes that the device is an F6-02-01.");
 
-			// friendlyName = "F6-02-01";
-			// description = "Light and Blind Control - Application Style 1";
-			// TODO AAA: Remove the lines below, and uncomment the properly
-			// two lines above.
-			if (this.chip_id == 25954420) {
-				// 0x018c0874 <=> 25954420 in int.
-				description = "(F6)";
-			} else if (this.chip_id == 25270546) {
-				// 0x01819912 <=> 25270546 in int.
-				description = "Liquid Leakage Sensor (mechanic energy harvester) (F6-05-01)";
-			} else {
+			if (friendlyName == null) {
+				// default friendlyName
 				friendlyName = "F6-02-01";
+			}
+			if (description == null) {
+				// default description
 				description = "Light and Blind Control - Application Style 1";
 			}
 		} else if ("213".equals(String.valueOf(rorg))) {
