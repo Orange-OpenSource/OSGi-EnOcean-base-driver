@@ -1,14 +1,18 @@
 package com.orange.impl.service.enocean.basedriver.conf;
 
 /**
- * RorgFuncTypeFriendlyname object.
+ * RorgFuncTypeFriendlynameDescription object.
+ * 
+ * Note that: description must come from EnOceanMessageDescription, apart for
+ * specific/configured cases, e.g. for demo purpose.
  */
-public class RorgFuncTypeFriendlyname {
+public class RorgFuncTypeFriendlynameDescription {
 
 	private String rorg;
 	private String func;
 	private String type;
 	private String friendlyname;
+	private String description;
 
 	/**
 	 * @param rorg
@@ -19,13 +23,16 @@ public class RorgFuncTypeFriendlyname {
 	 *            value.
 	 * @param friendlyname
 	 *            value.
+	 * @param description
+	 *            value.
 	 */
-	public RorgFuncTypeFriendlyname(String rorg, String func, String type,
-			String friendlyname) {
+	public RorgFuncTypeFriendlynameDescription(String rorg, String func,
+			String type, String friendlyname, String description) {
 		this.rorg = rorg;
 		this.func = func;
 		this.type = type;
 		this.friendlyname = friendlyname;
+		this.description = description;
 	}
 
 	/**
@@ -56,10 +63,18 @@ public class RorgFuncTypeFriendlyname {
 		return friendlyname;
 	}
 
+	/**
+	 * @return description value.
+	 */
+	public String getDescription() {
+		return description;
+	}
+
 	public String toString() {
 		return "" + this.getClass().getName() + "[rorg: " + getRorg()
 				+ ", func: " + getFunc() + ", type: " + getType()
-				+ ", friendlyname: " + getFriendlyname() + "]";
+				+ ", friendlyname: " + getFriendlyname() + ", description: "
+				+ getDescription() + "]";
 	}
 
 }
