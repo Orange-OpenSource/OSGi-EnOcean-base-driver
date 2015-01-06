@@ -147,11 +147,9 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 			// two lines above.
 			if (this.chip_id == 25954420) {
 				// 0x018c0874 <=> 25954420 in int.
-				friendlyName = "Eltako Smoke Detector";
 				description = "(F6)";
 			} else if (this.chip_id == 25270546) {
 				// 0x01819912 <=> 25270546 in int.
-				friendlyName = "AfrisoLab Water Sensor";
 				description = "Liquid Leakage Sensor (mechanic energy harvester) (F6-05-01)";
 			} else {
 				friendlyName = "F6-02-01";

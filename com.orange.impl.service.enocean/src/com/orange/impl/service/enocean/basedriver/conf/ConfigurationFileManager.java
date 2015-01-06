@@ -63,10 +63,10 @@ public class ConfigurationFileManager {
 	 * line with the following pattern:
 	 * 0x12345678_RORG_FUNC_TYPE_FRIENDLYNAME=A1-02-01-Bla bla-bla friendly
 	 * bla-bla name ;-) where RORG, FUNC, TYPE, and Friendlyname are separated
-	 * by a "-". In the example, the Rorg is: "A1", the Func is: "02", the Type
+	 * by a "##". In the example, the Rorg is: "A1", the Func is: "02", the Type
 	 * is: "01", and the Friendlyname is:
 	 * "Bla bla-bla friendly bla-bla name ;-)". The friendly name may contain
-	 * spaces, and "-".
+	 * spaces, but can not contain "##".
 	 * 
 	 * @param enOceanId
 	 *            as an hexa value written as follow, e.g. 0x12345678.
@@ -115,27 +115,39 @@ public class ConfigurationFileManager {
 					String friendlyname = null;
 					// Get rorg
 					int firstDashIndex = valueAssociatedToEnOceanIdKey
-							.indexOf("-");
+							.indexOf("##");
 					rorg = valueAssociatedToEnOceanIdKey.substring(0,
 							firstDashIndex);
+					if ("".equals(rorg)) {
+						rorg = null;
+					}
 					valueAssociatedToEnOceanIdKey = valueAssociatedToEnOceanIdKey
-							.substring(firstDashIndex + 1);
+							.substring(firstDashIndex + 2);
 					// Get func
 					int secondDashIndex = valueAssociatedToEnOceanIdKey
-							.indexOf("-");
+							.indexOf("##");
 					func = valueAssociatedToEnOceanIdKey.substring(0,
 							secondDashIndex);
+					if ("".equals(func)) {
+						func = null;
+					}
 					valueAssociatedToEnOceanIdKey = valueAssociatedToEnOceanIdKey
-							.substring(secondDashIndex + 1);
+							.substring(secondDashIndex + 2);
 					// Get type
 					int thirdDashIndex = valueAssociatedToEnOceanIdKey
-							.indexOf("-");
+							.indexOf("##");
 					type = valueAssociatedToEnOceanIdKey.substring(0,
 							thirdDashIndex);
+					if ("".equals(type)) {
+						type = null;
+					}
 					valueAssociatedToEnOceanIdKey = valueAssociatedToEnOceanIdKey
-							.substring(thirdDashIndex + 1);
+							.substring(thirdDashIndex + 2);
 					// Get friendlyname
 					friendlyname = valueAssociatedToEnOceanIdKey;
+					if ("".equals(friendlyname)) {
+						friendlyname = null;
+					}
 
 					result = new RorgFuncTypeFriendlyname(rorg, func, type,
 							friendlyname);
