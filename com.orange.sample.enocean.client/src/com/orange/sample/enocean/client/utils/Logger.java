@@ -4,7 +4,7 @@
  * Module name: com.orange.impl.service.enocean
  * Version: 1.0.0
  * 
- * Copyright (C) 2013 - 2014 Orange
+ * Copyright (C) 2013 - 2015 Orange
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@
 package com.orange.sample.enocean.client.utils;
 
 /**
- * @author Victor PERRON, Mailys ROBIN, Andre BOTTARO, Antonin CHAZALET.
+ * Logger.
  */
 public final class Logger {
 
@@ -38,50 +38,50 @@ public final class Logger {
 			.getBoolean("org.osgi.service.enocean.loglevel.error");
 
 	/**
-	 * Debug
+	 * DEBUG
 	 * 
 	 * @param tag
 	 * @param msg
 	 */
 	public static final void d(String tag, String msg) {
 		if (DEBUG) {
-			System.out.println("[" + tag + "] " + msg);
+			System.out.println("[DEBUG-" + tag + "] " + msg);
 		}
 	}
 
 	/**
-	 * Info
+	 * INFO
 	 * 
 	 * @param tag
 	 * @param msg
 	 */
 	public static final void i(String tag, String msg) {
 		if (INFO) {
-			System.out.println("[" + tag + "] " + msg);
+			System.out.println("[INFO--" + tag + "] " + msg);
 		}
 	}
 
 	/**
-	 * Warning
+	 * WARN
 	 * 
 	 * @param tag
 	 * @param msg
 	 */
 	public static final void w(String tag, String msg) {
 		if (WARN) {
-			System.out.println("[" + tag + "] " + msg);
+			System.out.println("[WARN--" + tag + "] " + msg);
 		}
 	}
 
 	/**
-	 * Error
+	 * ERROR
 	 * 
 	 * @param tag
 	 * @param msg
 	 */
 	public static final void e(String tag, String msg) {
 		if (ERROR) {
-			System.out.println("[" + tag + "] " + msg);
+			System.out.println("[ERROR-" + tag + "] " + msg);
 		}
 	}
 

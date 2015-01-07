@@ -2,6 +2,7 @@
 -include: ${build}/eclipse/jdt.bnd
 
 Bundle-Activator			= com.orange.sample.enocean.client.Activator
+Bundle-Copyright			= Copyright (C) 2013 - 2015 Orange.
 Bundle-Description			= A sample app that demonstrates EnOcean calpabilities.
 Bundle-RequiredExecutionEnvironment = OSGi/Minimum-1.1
 Bundle-Vendor				= Orange
