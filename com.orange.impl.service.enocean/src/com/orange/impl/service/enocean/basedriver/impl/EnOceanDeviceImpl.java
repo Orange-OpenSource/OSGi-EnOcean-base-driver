@@ -4,7 +4,7 @@
  * Module name: com.orange.impl.service.enocean
  * Version: 1.0.0
  * 
- * Copyright (C) 2013 - 2014 Orange
+ * Copyright (C) 2013 - 2015 Orange
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,8 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.device.Constants;
 import org.osgi.service.enocean.EnOceanDevice;
@@ -34,6 +36,8 @@ import org.osgi.service.enocean.EnOceanException;
 import org.osgi.service.enocean.EnOceanHandler;
 import org.osgi.service.enocean.EnOceanMessage;
 import org.osgi.service.enocean.EnOceanRPC;
+import org.osgi.service.enocean.descriptions.EnOceanMessageDescription;
+import org.osgi.service.enocean.descriptions.EnOceanMessageDescriptionSet;
 
 import com.orange.impl.service.enocean.basedriver.EnOceanBaseDriver;
 import com.orange.impl.service.enocean.basedriver.conf.ConfigurationFileManager;
@@ -100,7 +104,8 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 		// Check if something is defined in the config file
 		RorgFuncTypeFriendlynameDescription rFTFD = ConfigurationFileManager
 				.getRorgFuncTypeAndFriendlynameFromConfigFile("0x"
-						+ Utils.bytesToHexString(Utils.intTo4Bytes(305419896)));
+						+ Utils.bytesToHexString(Utils
+								.intTo4Bytes(this.chip_id)));
 
 		int correctedFunc = func;
 		int correctedType = type;
@@ -124,67 +129,123 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 			if ("2".equals(String.valueOf(correctedFunc))) {
 				if ("5".equals(String.valueOf(correctedType))) {
 					Logger.d(TAG, "This is an A5-02-05 device.");
-					friendlyName = "A5-02-05";
-					description = "Temperature Sensor Range 0°C to +40°C";
+					if (friendlyName == null) {
+						// default friendlyName
+						friendlyName = "A5-02-05";
+					}
+					if (description == null) {
+						String descriptionTemp = getEnOceanMessageDescription(
+								rorg, correctedFunc, correctedType);
+						if (descriptionTemp != null) {
+							description = descriptionTemp;
+						} else {
+							// default description
+							description = "Temperature Sensor Range 0°C to +40°C";
+						}
+					}
 				} else {
 					Logger.d(TAG, "This is an A5-02-yz device.");
-					friendlyName = "A5-02-yz";
-					description = "Not handled";
+					if (friendlyName == null) {
+						friendlyName = "A5-02-yz";
+					}
+					if (description == null) {
+						description = "Not handled";
+					}
 				}
 			} else {
 				Logger.d(TAG, "This is an A5-wx-yz device.");
-				friendlyName = "A5-wx-yz";
-				description = "Not handled";
+				if (friendlyName == null) {
+					friendlyName = "A5-wx-yz";
+				}
+				if (description == null) {
+					description = "Not handled";
+				}
 			}
 		} else if ("246".equals(String.valueOf(rorg))) {
 			// hex 0xf6 == int 246.
 			Logger.d(
 					TAG,
 					"This is a F6-wx-yz device. FUNC, and TYPE are NOT sent by F6-wx-yz device. The system then assumes that the device is an F6-02-01.");
-
 			if (friendlyName == null) {
 				// default friendlyName
 				friendlyName = "F6-02-01";
 			}
 			if (description == null) {
-				// default description
-				description = "Light and Blind Control - Application Style 1";
+				String descriptionTemp = getEnOceanMessageDescription(rorg,
+						correctedFunc, correctedType);
+				if (descriptionTemp != null) {
+					description = descriptionTemp;
+				} else {
+					// default description
+					description = "Light and Blind Control - Application Style 1";
+				}
 			}
 		} else if ("213".equals(String.valueOf(rorg))) {
 			// hex 0xd5 == int 213.
 			Logger.d(
 					TAG,
 					"This is a D5-wx-yz device. FUNC, and TYPE are NOT sent by D5-wx-yz device. The system then assumes that the device is a D5-00-01.");
-			friendlyName = "D5-00-01";
-			description = "Single Input Contact";
+			if (friendlyName == null) {
+				friendlyName = "D5-00-01";
+			}
+			if (description == null) {
+				String descriptionTemp = getEnOceanMessageDescription(rorg,
+						correctedFunc, correctedType);
+				if (descriptionTemp != null) {
+					description = descriptionTemp;
+				} else {
+					// default description
+					description = "Single Input Contact";
+				}
+			}
 		} else if ("210".equals(String.valueOf(rorg))) {
 			// hex 0xd2 == int 210.
 			if ("1".equals(String.valueOf(correctedFunc))) {
 				if ("8".equals(String.valueOf(correctedType))) {
 					Logger.d(TAG, "This is a D2-01-08 device.");
-					friendlyName = "D2-01-08";
-					description = "Electronic switches and dimmers with Energy Measurement and Local Control";
+					if (friendlyName == null) {
+						friendlyName = "D2-01-08";
+					}
+					if (description == null) {
+						description = "Electronic switches and dimmers with Energy Measurement and Local Control";
+					}
 				} else {
 					Logger.d(TAG, "This is a D2-01-yz device.");
-					friendlyName = "D2-01-yz";
-					description = "Not handled";
+					if (friendlyName == null) {
+						friendlyName = "D2-01-yz";
+					}
+					if (description == null) {
+						description = "Not handled";
+					}
 				}
 			} else if ("160".equals(String.valueOf(correctedFunc))) {
 				// hex 0xa0 == int 160.
 				if ("1".equals(String.valueOf(correctedType))) {
 					// hex 0x01 == int 1.
 					Logger.d(TAG, "This is a D2-A0-01 device.");
-					friendlyName = "AfrisoLab Water Valve";
-					description = "Standard Control (BI-DIR) (D2-A0-01)";
+					if (friendlyName == null) {
+						friendlyName = "AfrisoLab Water Valve";
+					}
+					if (description == null) {
+						description = "Standard Control (BI-DIR) (D2-A0-01)";
+					}
 				} else {
 					Logger.d(TAG, "This is a D2-01-yz device.");
-					friendlyName = "D2-01-yz";
-					description = "Not handled";
+					if (friendlyName == null) {
+						friendlyName = "D2-01-yz";
+					}
+					if (description == null) {
+						description = "Not handled";
+					}
 				}
 			} else {
 				Logger.d(TAG, "This is a D2-wx-yz device.");
-				friendlyName = "D2-wx-yz";
-				description = "Not handled";
+				if (friendlyName == null) {
+					friendlyName = "D2-wx-yz";
+				}
+				if (description == null) {
+					description = "Not handled";
+				}
 			}
 		} else {
 			Logger.d(
@@ -213,6 +274,39 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 								.intTo4Bytes(this.chip_id)));
 		/* Initializations */
 		lastMessage = null;
+	}
+
+	private String getEnOceanMessageDescription(int rorg, int func, int type) {
+		try {
+			ServiceReference[] srs = bc.getAllServiceReferences(
+					EnOceanMessageDescriptionSet.class.getName(), null);
+			Logger.print("srs: " + srs);
+			if (srs == null) {
+				Logger.print("There is NO service registered with the following class name: "
+						+ EnOceanMessageDescriptionSet.class.getName());
+			} else {
+				Logger.print("srs.length: " + srs.length);
+
+				int i = 0;
+				while (i < srs.length) {
+					ServiceReference sRef = srs[i];
+					Logger.print("sRef: " + sRef);
+					EnOceanMessageDescriptionSet eomds = (EnOceanMessageDescriptionSet) bc
+							.getService(sRef);
+					Logger.print("eomds: " + eomds);
+					EnOceanMessageDescription eomd = eomds
+							.getMessageDescription(rorg, func, type, -1);
+					Logger.print("eomd: " + eomd);
+					if (eomd != null) {
+						return eomd.getMessageDescription();
+					}
+					i = i + 1;
+				}
+			}
+		} catch (InvalidSyntaxException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	/**
