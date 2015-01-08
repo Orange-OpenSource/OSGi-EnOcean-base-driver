@@ -1,6 +1,7 @@
 # Set javac settings from JDT prefs
 -include: ${build}/eclipse/jdt.bnd
 
+Bundle-Activator  : com.orange.enocean.eeps.Activator
 Bundle-Copyright  : Copyright (C) 2013 - 2015 Orange.
 Bundle-Description: OSGi EnOcean bundle that contained the three EEPs that the EnOcean Alliance allowed the project to use.
 Bundle-License    : Apache License, Version 2.0

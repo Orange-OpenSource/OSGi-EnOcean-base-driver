@@ -106,13 +106,13 @@ public class Activator implements BundleActivator {
 				EnOceanMessageDescriptionSet eomds = (EnOceanMessageDescriptionSet) bc
 						.getService(sRef);
 				Logger.print("eomds: " + eomds);
-				Logger.print("eomds.: "
+				Logger.print("eomds.getMessageDescription(165, 2, 5, -1): "
 						+ eomds.getMessageDescription(165, 2, 5, -1));
-				Logger.print("eomds.: "
+				Logger.print("eomds.getMessageDescription(213, 0, 1, -1): "
 						+ eomds.getMessageDescription(213, 0, 1, -1));
-				Logger.print("eomds.: "
+				Logger.print("eomds.getMessageDescription(246, 2, 1, -1): "
 						+ eomds.getMessageDescription(246, 2, 1, -1));
-				Logger.print("eomds.: "
+				Logger.print("eomds.getMessageDescription(-1, -1, -1, -1): "
 						+ eomds.getMessageDescription(-1, -1, -1, -1));
 
 				i = i + 1;
