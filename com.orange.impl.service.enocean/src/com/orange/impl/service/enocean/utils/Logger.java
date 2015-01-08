@@ -4,7 +4,7 @@
  * Module name: com.orange.impl.service.enocean
  * Version: 1.0.0
  * 
- * Copyright (C) 2013 - 2014 Orange
+ * Copyright (C) 2013 - 2015 Orange
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -83,5 +83,14 @@ public final class Logger {
 		if (ERROR) {
 			System.out.println("[ERROR-" + tag + "] " + msg);
 		}
+	}
+
+	/**
+	 * Print
+	 * 
+	 * @param msg
+	 */
+	public static final void print(String msg) {
+		System.out.println(msg);
 	}
 }

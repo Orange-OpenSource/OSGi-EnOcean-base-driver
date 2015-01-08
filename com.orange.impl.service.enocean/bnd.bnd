@@ -2,7 +2,7 @@
 -include: ${build}/eclipse/jdt.bnd
 
 Bundle-Activator  : com.orange.impl.service.enocean.EnOceanBundleActivator
-Bundle-Copyright  : Copyright (C) 2013 - 2014 Orange.
+Bundle-Copyright  : Copyright (C) 2013 - 2015 Orange.
 Bundle-Description: OSGi EnOcean base driver bundle.
 Bundle-License    : Apache License, Version 2.0
 Bundle-RequiredExecutionEnvironment: OSGi/Minimum-1.1
