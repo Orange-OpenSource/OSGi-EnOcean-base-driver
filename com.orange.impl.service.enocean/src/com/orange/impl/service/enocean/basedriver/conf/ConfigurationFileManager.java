@@ -5,12 +5,16 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+import com.orange.impl.service.enocean.utils.Logger;
 import com.orange.impl.service.enocean.utils.Utils;
 
 /**
  * Manage the configuration file.
  */
 public class ConfigurationFileManager {
+
+	/** TAG */
+	public static final String TAG = ConfigurationFileManager.class.getName();
 
 	private static Properties config = new Properties();
 
@@ -21,37 +25,40 @@ public class ConfigurationFileManager {
 	 * @throws IOException
 	 */
 	public static void main(String[] args) throws IOException {
-		System.out.println("---"
+		Logger.d(TAG, "---"
 				+ getRorgFuncTypeAndFriendlynameFromConfigFile("0x12345678"));
 
-		System.out.println("---"
+		Logger.d(TAG, "---"
 				+ getRorgFuncTypeAndFriendlynameFromConfigFile(null));
 
-		System.out.println("---"
-				+ getRorgFuncTypeAndFriendlynameFromConfigFile(""));
+		Logger.d(TAG, "---" + getRorgFuncTypeAndFriendlynameFromConfigFile(""));
 
-		System.out.println("---"
+		Logger.d(TAG, "---"
 				+ getRorgFuncTypeAndFriendlynameFromConfigFile("0x66655544"));
 
 		// 0x12345678 == int 305419896
-		System.out.println("---"
-				+ Utils.bytesToHexString(Utils.intTo4Bytes(305419896)));
+		Logger.d(TAG,
+				"---" + Utils.bytesToHexString(Utils.intTo4Bytes(305419896)));
 
-		System.out.println("---"
-				+ ConfigurationFileManager
-						.getRorgFuncTypeAndFriendlynameFromConfigFile("0x"
-								+ Utils.bytesToHexString(Utils
-										.intTo4Bytes(305419896))));
+		Logger.d(
+				TAG,
+				"---"
+						+ ConfigurationFileManager
+								.getRorgFuncTypeAndFriendlynameFromConfigFile("0x"
+										+ Utils.bytesToHexString(Utils
+												.intTo4Bytes(305419896))));
 
 		// 0x00123456 == int 1193046
-		System.out.println("---"
-				+ Utils.bytesToHexString(Utils.intTo4Bytes(1193046)));
+		Logger.d(TAG,
+				"---" + Utils.bytesToHexString(Utils.intTo4Bytes(1193046)));
 
-		System.out.println("---"
-				+ ConfigurationFileManager
-						.getRorgFuncTypeAndFriendlynameFromConfigFile("0x"
-								+ Utils.bytesToHexString(Utils
-										.intTo4Bytes(1193046))));
+		Logger.d(
+				TAG,
+				"---"
+						+ ConfigurationFileManager
+								.getRorgFuncTypeAndFriendlynameFromConfigFile("0x"
+										+ Utils.bytesToHexString(Utils
+												.intTo4Bytes(1193046))));
 
 	}
 
@@ -85,28 +92,27 @@ public class ConfigurationFileManager {
 		String configFilePath = "." + File.separator + "enocean_config"
 				+ File.separator + "enocean_config.txt";
 		File configFile = new File(configFilePath);
-		System.out.println("configFile: " + configFile);
+		Logger.d(TAG, "configFile: " + configFile);
 		if (configFile.exists()) {
-			System.out.println("DEBUG: The conf file exists: configFile: "
+			Logger.d(TAG, "DEBUG: The conf file exists: configFile: "
 					+ configFile);
 			// Load current conf file.
 			try {
 				FileInputStream fis = new FileInputStream(configFile);
 				config.load(fis);
-				System.out
-						.println("DEBUG: Conf file has properly been loaded: config: "
+				Logger.d(TAG,
+						"DEBUG: Conf file has properly been loaded: config: "
 								+ config);
 
 				String enOceanIdKey = enOceanId
-						+ "_RORG_FUNC_TYPE_FRIENDLYNAME";
+						+ "_RORG_FUNC_TYPE_FRIENDLYNAME_DESCRIPTION";
 				if (config.containsKey(enOceanIdKey)) {
-					System.out.println("DEBUG: The given enOceanId: "
-							+ enOceanId
+					Logger.d(TAG, "DEBUG: The given enOceanId: " + enOceanId
 							+ " appears in the conf file, via the expected: "
 							+ enOceanIdKey + " key.");
 					String valueAssociatedToEnOceanIdKey = config
 							.getProperty(enOceanIdKey);
-					System.out.println("DEBUG: Its associated value is: "
+					Logger.d(TAG, "DEBUG: Its associated value is: "
 							+ valueAssociatedToEnOceanIdKey);
 
 					// Check that valueAssociatedToEnOceanIdKey contains four
@@ -161,7 +167,7 @@ public class ConfigurationFileManager {
 							.substring(fourthDashIndex + 2);
 					// Get description
 					description = valueAssociatedToEnOceanIdKey;
-					System.out.println("description: " + description);
+					Logger.d(TAG, "description: " + description);
 					if ("".equals(description)) {
 						description = null;
 					}
@@ -170,13 +176,13 @@ public class ConfigurationFileManager {
 
 					return result;
 				} else {
-					System.out.println("DEBUG: The given enOceanId: "
-							+ enOceanId + " does NOT appear in the conf file.");
+					Logger.d(TAG, "DEBUG: The given enOceanId: " + enOceanId
+							+ " does NOT appear in the conf file.");
 					return result;
 				}
 			} catch (IOException e) {
-				System.out
-						.println("DEBUG: Conf file has NOT properly been loaded: config: "
+				Logger.d(TAG,
+						"DEBUG: Conf file has NOT properly been loaded: config: "
 								+ config);
 				e.printStackTrace();
 				return result;
