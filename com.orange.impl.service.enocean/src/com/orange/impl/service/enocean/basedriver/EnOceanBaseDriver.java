@@ -65,6 +65,9 @@ import com.orange.impl.service.enocean.utils.Utils;
 public class EnOceanBaseDriver implements EnOceanPacketListener,
 		ServiceTrackerCustomizer, EventHandler {
 
+	/** TAG */
+	public static final String TAG = EnOceanBaseDriver.class.getName();
+
 	private BundleContext bc;
 	private Hashtable eoDevices;
 	private Hashtable eoHostRefs;
@@ -73,11 +76,6 @@ public class EnOceanBaseDriver implements EnOceanPacketListener,
 	private ServiceTracker eventAdminTracker;
 	private ServiceRegistration eventHandlerRegistration;
 	private EnOceanHostImpl host;
-
-	/**
-	 * TAG
-	 */
-	public static final String TAG = "EnOceanBaseDriver";
 
 	/**
 	 * CONFIG_EXPORTED_PID_TABLE
@@ -119,8 +117,8 @@ public class EnOceanBaseDriver implements EnOceanPacketListener,
 		// if (ref != null) {
 		// eventAdmin = (EventAdmin) bc.getService(ref);
 		// } else {
-		// System.out
-		// .println("The execution environment provides NO EventAdmin service.");
+		// Logger.d(TAG,
+		// "The execution environment provides NO EventAdmin service.");
 		// }
 		eventAdminTracker = new ServiceTracker(bundleContext,
 				EventAdmin.class.getName(), null);
@@ -441,7 +439,7 @@ public class EnOceanBaseDriver implements EnOceanPacketListener,
 						host.allocChipID(servicePid);
 					}
 				} catch (Exception e) {
-					System.out.println("exception: " + e.getMessage());
+					Logger.d(TAG, "exception: " + e.getMessage());
 				}
 				eoDevices.put(servicePid, bc.getService(ref));
 				Logger.d(TAG,
@@ -453,28 +451,25 @@ public class EnOceanBaseDriver implements EnOceanPacketListener,
 	}
 
 	public void modifiedService(ServiceReference arg0, Object service) {
-		System.out
-				.println("IN: EnOceanBaseDriver.modifiedService(ServiceReference: "
+		Logger.d(TAG,
+				"IN: EnOceanBaseDriver.modifiedService(ServiceReference: "
 						+ arg0 + ", Object: " + service + ")");
 	}
 
 	public void removedService(ServiceReference arg0, Object service) {
-		System.out
-				.println("IN: EnOceanBaseDriver.removedService(ServiceReference: "
-						+ arg0 + ", Object: " + service + ")");
+		Logger.d(TAG, "IN: EnOceanBaseDriver.removedService(ServiceReference: "
+				+ arg0 + ", Object: " + service + ")");
 	}
 
 	public void handleEvent(Event event) {
-		System.out.println("IN: EnOceanBaseDriver.handleEvent(event: " + event
-				+ ")");
+		Logger.d(TAG, "IN: EnOceanBaseDriver.handleEvent(event: " + event + ")");
 		if (event.getTopic().equals(EnOceanEvent.TOPIC_MSG_RECEIVED)) {
-			System.out.println("event.getPropertyNames(): "
-					+ event.getPropertyNames());
+			Logger.d(TAG,
+					"event.getPropertyNames(): " + event.getPropertyNames());
 			String[] propertyNames = event.getPropertyNames();
 			int i = 0;
 			while (i < propertyNames.length) {
-				System.out.println("propertyNames[" + i + "]: "
-						+ propertyNames[i]
+				Logger.d(TAG, "propertyNames[" + i + "]: " + propertyNames[i]
 						+ ", event.getProperty(propertyNames[" + i + "]): "
 						+ event.getProperty(propertyNames[i]));
 				i = i + 1;
@@ -482,23 +477,25 @@ public class EnOceanBaseDriver implements EnOceanPacketListener,
 			if (event.getProperty(EnOceanEvent.PROPERTY_EXPORTED) != null) {
 				EnOceanMessage msg = (EnOceanMessage) event
 						.getProperty(EnOceanEvent.PROPERTY_MESSAGE);
-				System.out.println("msg: " + msg);
+				Logger.d(TAG, "msg: " + msg);
 				if (msg != null) {
 					EspPacket pkt = new EspPacket(msg);
-					System.out.println("Writing packet : "
-							+ Utils.bytesToHexString(pkt.serialize()));
+					Logger.d(
+							TAG,
+							"Writing packet : "
+									+ Utils.bytesToHexString(pkt.serialize()));
 					host.send(pkt.serialize());
 				} else {
-					System.out.println("msg is null");
+					Logger.d(TAG, "msg is null");
 				}
 			} else {
-				System.out
-						.println("event.getProperty(EnOceanEvent.PROPERTY_EXPORTED) is null");
+				Logger.d(TAG,
+						"event.getProperty(EnOceanEvent.PROPERTY_EXPORTED) is null");
 			}
 		} else {
-			System.out.println("event.getTopic(): " + event.getTopic());
+			Logger.d(TAG, "event.getTopic(): " + event.getTopic());
 		}
-		System.out.println("OUT: EnOceanBaseDriver.handleEvent(event: " + event
+		Logger.d(TAG, "OUT: EnOceanBaseDriver.handleEvent(event: " + event
 				+ ")");
 	}
 

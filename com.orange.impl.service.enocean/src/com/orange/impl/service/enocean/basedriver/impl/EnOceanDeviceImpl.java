@@ -53,6 +53,7 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 
 	/** TAG */
 	public static final String TAG = EnOceanDeviceImpl.class.getName();
+
 	private BundleContext bc;
 	private ServiceRegistration sReg;
 
@@ -280,23 +281,24 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 		try {
 			ServiceReference[] srs = bc.getAllServiceReferences(
 					EnOceanMessageDescriptionSet.class.getName(), null);
-			Logger.print("srs: " + srs);
+			Logger.d(TAG, "srs: " + srs);
 			if (srs == null) {
-				Logger.print("There is NO service registered with the following class name: "
-						+ EnOceanMessageDescriptionSet.class.getName());
+				Logger.d(TAG,
+						"There is NO service registered with the following class name: "
+								+ EnOceanMessageDescriptionSet.class.getName());
 			} else {
-				Logger.print("srs.length: " + srs.length);
+				Logger.d(TAG, "srs.length: " + srs.length);
 
 				int i = 0;
 				while (i < srs.length) {
 					ServiceReference sRef = srs[i];
-					Logger.print("sRef: " + sRef);
+					Logger.d(TAG, "sRef: " + sRef);
 					EnOceanMessageDescriptionSet eomds = (EnOceanMessageDescriptionSet) bc
 							.getService(sRef);
-					Logger.print("eomds: " + eomds);
+					Logger.d(TAG, "eomds: " + eomds);
 					EnOceanMessageDescription eomd = eomds
 							.getMessageDescription(rorg, func, type, -1);
-					Logger.print("eomd: " + eomd);
+					Logger.d(TAG, "eomd: " + eomd);
 					if (eomd != null) {
 						return eomd.getMessageDescription();
 					}

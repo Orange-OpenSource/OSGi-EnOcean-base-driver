@@ -45,7 +45,7 @@ public final class Logger {
 	 */
 	public static final void d(String tag, String msg) {
 		if (DEBUG) {
-			System.out.println("[DEBUG-" + tag + "] " + msg);
+			print("[DEBUG-" + tag + "] " + msg);
 		}
 	}
 
@@ -57,7 +57,7 @@ public final class Logger {
 	 */
 	public static final void i(String tag, String msg) {
 		if (INFO) {
-			System.out.println("[INFO--" + tag + "] " + msg);
+			print("[INFO--" + tag + "] " + msg);
 		}
 	}
 
@@ -69,7 +69,7 @@ public final class Logger {
 	 */
 	public static final void w(String tag, String msg) {
 		if (WARN) {
-			System.out.println("[WARN--" + tag + "] " + msg);
+			print("[WARN--" + tag + "] " + msg);
 		}
 	}
 
@@ -81,7 +81,7 @@ public final class Logger {
 	 */
 	public static final void e(String tag, String msg) {
 		if (ERROR) {
-			System.out.println("[ERROR-" + tag + "] " + msg);
+			print("[ERROR-" + tag + "] " + msg);
 		}
 	}
 
@@ -90,7 +90,7 @@ public final class Logger {
 	 * 
 	 * @param msg
 	 */
-	public static final void print(String msg) {
+	private static final void print(String msg) {
 		System.out.println(msg);
 	}
 }

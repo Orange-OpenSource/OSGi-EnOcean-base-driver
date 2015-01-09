@@ -28,12 +28,16 @@ import java.util.List;
 
 import org.osgi.service.enocean.EnOceanMessage;
 
+import com.orange.impl.service.enocean.utils.Logger;
 import com.orange.impl.service.enocean.utils.Utils;
 
 /**
  * Message.
  */
 public abstract class Message implements EnOceanMessage {
+
+	/** TAG */
+	public static final String TAG = Message.class.getName();
 
 	/** MESSAGE_4BS */
 	public static final byte MESSAGE_4BS = (byte) 0xA5;
@@ -80,14 +84,12 @@ public abstract class Message implements EnOceanMessage {
 	 *            is d500008a92390001ffffffff3000
 	 */
 	public Message(byte[] data) {
-		System.out.println("////////////////////////////Message(byte[] data: "
-				+ data);
-		System.out.println("////////////////////////////data.length: "
-				+ data.length);
+		Logger.d(TAG, "////////Message(byte[] data: " + data);
+		Logger.d(TAG, "////////data.length: " + data.length);
 
 		int i = 0;
 		while (i < data.length) {
-			System.out.println("////data[" + i + "]: " + data[i]);
+			Logger.d(TAG, "////data[" + i + "]: " + data[i]);
 			i = i + 1;
 		}
 

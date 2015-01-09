@@ -25,12 +25,16 @@ package com.orange.impl.service.enocean.basedriver.esp;
 
 import org.osgi.service.enocean.EnOceanMessage;
 
+import com.orange.impl.service.enocean.utils.Logger;
 import com.orange.impl.service.enocean.utils.Utils;
 
 /**
  * EspPacket.
  */
 public class EspPacket {
+
+	/** TAG */
+	public static final String TAG = EspPacket.class.getName();
 
 	/** SYNC_BYTE */
 	public static final byte SYNC_BYTE = 0x55;
@@ -76,11 +80,11 @@ public class EspPacket {
 	public EspPacket(EnOceanMessage msg) {
 		setPacketType(TYPE_RADIO);
 		byte[] dataTemp = msg.getBytes();
-		System.out.println("dataTemp: " + dataTemp);
+		Logger.d(TAG, "dataTemp: " + dataTemp);
 		setData(dataTemp);
 		byte[] optionalTemp = Utils.byteConcat((byte) msg.getSubTelNum(),
 				Utils.intTo4Bytes(msg.getDestinationId()));
-		System.out.println("optionalTemp: " + optionalTemp);
+		Logger.d(TAG, "optionalTemp: " + optionalTemp);
 		optionalTemp = Utils.byteConcat(optionalTemp, (byte) msg.getDbm());
 		optionalTemp = Utils.byteConcat(optionalTemp,
 				(byte) msg.getSecurityLevelFormat());

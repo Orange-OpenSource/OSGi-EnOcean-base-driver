@@ -16,6 +16,9 @@ import com.orange.sample.enocean.client.utils.Logger;
  */
 public class MiscCommand {
 
+	/** TAG */
+	public static final String TAG = MiscCommand.class.getName();
+
 	private final BundleContext bc;
 
 	/**
@@ -30,7 +33,7 @@ public class MiscCommand {
 	 */
 	public void aa() {
 		String result = "aa command";
-		System.out.println(result);
+		Logger.d(TAG, result);
 	}
 
 	/**
@@ -40,7 +43,7 @@ public class MiscCommand {
 	 */
 	public String bb(String param1) throws IOException {
 		String result = "bb command with param1: " + param1;
-		// System.out.println(result);
+		// Logger.d(TAG, result);
 		return result;
 	}
 
@@ -48,29 +51,33 @@ public class MiscCommand {
 	 * Display all the services.
 	 */
 	public void ds() {
-		System.out.println("This ds command displays all the services.");
+		Logger.d(TAG, "This ds command displays all the services.");
 		// display all the services.
 		try {
 			ServiceReference[] allsrs = bc.getAllServiceReferences(null, null);
-			Logger.print("allsrs: " + allsrs);
+			Logger.d(TAG, "allsrs: " + allsrs);
 			if (allsrs == null) {
-				Logger.print("There is NO service registered at all.");
+				Logger.d(TAG, "There is NO service registered at all.");
 			} else {
-				Logger.print("allsrs.length: " + allsrs.length);
+				Logger.d(TAG, "allsrs.length: " + allsrs.length);
 
 				int i = 0;
 				while (i < allsrs.length) {
 					ServiceReference sr = allsrs[i];
-					Logger.print("sr: " + sr);
+					Logger.d(TAG, "sr: " + sr);
 					String[] pks = sr.getPropertyKeys();
 					int j = 0;
 					while (j < pks.length) {
-						Logger.print("pks[" + j + "]: " + pks[j]
-								+ ", sr.getProperty(" + pks[j] + "): "
-								+ sr.getProperty(pks[j]));
-						Logger.print("sr.getProperty(" + pks[j]
-								+ ").getClass().getName()"
-								+ sr.getProperty(pks[j]).getClass().getName());
+						Logger.d(TAG,
+								"pks[" + j + "]: " + pks[j]
+										+ ", sr.getProperty(" + pks[j] + "): "
+										+ sr.getProperty(pks[j]));
+						Logger.d(TAG,
+								"sr.getProperty("
+										+ pks[j]
+										+ ").getClass().getName()"
+										+ sr.getProperty(pks[j]).getClass()
+												.getName());
 						j = j + 1;
 					}
 					i = i + 1;
@@ -119,7 +126,7 @@ public class MiscCommand {
 
 		EnOceanHandler handlerTurnOnRpc = new EnOceanHandler() {
 			public void notifyResponse(EnOceanRPC enOceanRPC, byte[] payload) {
-				Logger.print("enOceanRPC: " + enOceanRPC + ", payload: "
+				Logger.d(TAG, "enOceanRPC: " + enOceanRPC + ", payload: "
 						+ payload);
 			}
 		};
@@ -131,9 +138,9 @@ public class MiscCommand {
 		} else {
 			Logger.e(this.getClass().getName(),
 					"There is an EnOceanDevice --> So invocation is possible.");
-			Logger.print("BEFORE invoking...");
+			Logger.d(TAG, "BEFORE invoking...");
 			eod.invoke(appairRPC, handlerTurnOnRpc);
-			Logger.print("AFTER invoking...");
+			Logger.d(TAG, "AFTER invoking...");
 		}
 	}
 
@@ -174,7 +181,7 @@ public class MiscCommand {
 
 		EnOceanHandler handlerTurnOnRpc = new EnOceanHandler() {
 			public void notifyResponse(EnOceanRPC enOceanRPC, byte[] payload) {
-				Logger.print("enOceanRPC: " + enOceanRPC + ", payload: "
+				Logger.d(TAG, "enOceanRPC: " + enOceanRPC + ", payload: "
 						+ payload);
 			}
 		};
@@ -186,9 +193,9 @@ public class MiscCommand {
 		} else {
 			Logger.e(this.getClass().getName(),
 					"There is an EnOceanDevice --> So invocation is possible.");
-			Logger.print("BEFORE invoking...");
+			Logger.d(TAG, "BEFORE invoking...");
 			eod.invoke(appairRPC, handlerTurnOnRpc);
-			Logger.print("AFTER invoking...");
+			Logger.d(TAG, "AFTER invoking...");
 		}
 
 	}
@@ -230,7 +237,7 @@ public class MiscCommand {
 
 		EnOceanHandler handlerTurnOnRpc = new EnOceanHandler() {
 			public void notifyResponse(EnOceanRPC enOceanRPC, byte[] payload) {
-				Logger.print("enOceanRPC: " + enOceanRPC + ", payload: "
+				Logger.d(TAG, "enOceanRPC: " + enOceanRPC + ", payload: "
 						+ payload);
 			}
 		};
@@ -242,9 +249,9 @@ public class MiscCommand {
 		} else {
 			Logger.e(this.getClass().getName(),
 					"There is an EnOceanDevice --> So invocation is possible.");
-			Logger.print("BEFORE invoking...");
+			Logger.d(TAG, "BEFORE invoking...");
 			eod.invoke(appairRPC, handlerTurnOnRpc);
-			Logger.print("AFTER invoking...");
+			Logger.d(TAG, "AFTER invoking...");
 		}
 
 	}
@@ -287,7 +294,7 @@ public class MiscCommand {
 
 		EnOceanHandler handlerTurnOnRpc = new EnOceanHandler() {
 			public void notifyResponse(EnOceanRPC enOceanRPC, byte[] payload) {
-				Logger.print("enOceanRPC: " + enOceanRPC + ", payload: "
+				Logger.d(TAG, "enOceanRPC: " + enOceanRPC + ", payload: "
 						+ payload);
 			}
 		};
@@ -299,9 +306,9 @@ public class MiscCommand {
 		} else {
 			Logger.e(this.getClass().getName(),
 					"There is an EnOceanDevice --> So invocation is possible.");
-			Logger.print("BEFORE invoking...");
+			Logger.d(TAG, "BEFORE invoking...");
 			eod.invoke(appairRPC, handlerTurnOnRpc);
-			Logger.print("AFTER invoking...");
+			Logger.d(TAG, "AFTER invoking...");
 		}
 	}
 
@@ -351,7 +358,7 @@ public class MiscCommand {
 
 		EnOceanHandler handlerTurnOnRpc = new EnOceanHandler() {
 			public void notifyResponse(EnOceanRPC enOceanRPC, byte[] payload) {
-				Logger.print("enOceanRPC: " + enOceanRPC + ", payload: "
+				Logger.d(TAG, "enOceanRPC: " + enOceanRPC + ", payload: "
 						+ payload);
 			}
 		};
@@ -363,9 +370,9 @@ public class MiscCommand {
 		} else {
 			Logger.e(this.getClass().getName(),
 					"There is an EnOceanDevice --> So invocation is possible.");
-			Logger.print("BEFORE invoking...");
+			Logger.d(TAG, "BEFORE invoking...");
 			eod.invoke(appairRPC, handlerTurnOnRpc);
-			Logger.print("AFTER invoking...");
+			Logger.d(TAG, "AFTER invoking...");
 		}
 	}
 
@@ -377,24 +384,26 @@ public class MiscCommand {
 		try {
 			ServiceReference[] srs = bc.getAllServiceReferences(
 					EnOceanDevice.class.getName(), null);
-			Logger.print("srs: " + srs);
+			Logger.d(TAG, "srs: " + srs);
 			if (srs == null) {
-				Logger.print("There is NO service registered with the following class name: "
-						+ EnOceanDevice.class.getName());
+				Logger.d(TAG,
+						"There is NO service registered with the following class name: "
+								+ EnOceanDevice.class.getName());
 				return null;
 			} else {
-				Logger.print("srs.length: " + srs.length);
+				Logger.d(TAG, "srs.length: " + srs.length);
 				int i = 0;
 				while (i < srs.length) {
 					ServiceReference sr = srs[i];
-					Logger.print("sr: " + sr);
+					Logger.d(TAG, "sr: " + sr);
 
 					String[] pks = sr.getPropertyKeys();
 					int j = 0;
 					while (j < pks.length) {
-						Logger.print("pks[" + j + "]: " + pks[j]
-								+ ", event.getProperty(" + pks[j] + "): "
-								+ sr.getProperty(pks[j]));
+						Logger.d(TAG,
+								"pks[" + j + "]: " + pks[j]
+										+ ", event.getProperty(" + pks[j]
+										+ "): " + sr.getProperty(pks[j]));
 						j = j + 1;
 					}
 

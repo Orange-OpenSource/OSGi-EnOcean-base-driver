@@ -40,6 +40,9 @@ import com.orange.enocean.eeps.utils.Logger;
  */
 public class Activator implements BundleActivator {
 
+	/** TAG */
+	public static final String TAG = Activator.class.getName();
+
 	static final A50205EnOceanMessageDescription A50205EOMD = new A50205EnOceanMessageDescription();
 	static final D50001EnOceanMessageDescription D50001EOMD = new D50001EnOceanMessageDescription();
 	static final F60201EnOceanMessageDescription F60201EOMD = new F60201EnOceanMessageDescription();
@@ -50,7 +53,7 @@ public class Activator implements BundleActivator {
 	public void start(BundleContext bundleContext)
 			throws InvalidSyntaxException {
 
-		System.out.println("IN: com.orange.enocean.eeps.Activator.start(bc: "
+		Logger.d(TAG, "IN: com.orange.enocean.eeps.Activator.start(bc: "
 				+ bundleContext + ")");
 
 		this.bc = bundleContext;
@@ -82,52 +85,54 @@ public class Activator implements BundleActivator {
 		// their associated EnOceanMessageDescriptions.
 		ServiceReference[] srs = bc.getAllServiceReferences(
 				EnOceanMessageDescriptionSet.class.getName(), null);
-		Logger.print("srs: " + srs);
+		Logger.d(TAG, "srs: " + srs);
 		if (srs == null) {
-			Logger.print("There is NO service registered with the following class name: "
-					+ EnOceanMessageDescriptionSet.class.getName());
+			Logger.d(TAG,
+					"There is NO service registered with the following class name: "
+							+ EnOceanMessageDescriptionSet.class.getName());
 		} else {
-			Logger.print("srs.length: " + srs.length);
+			Logger.d(TAG, "srs.length: " + srs.length);
 
 			int i = 0;
 			while (i < srs.length) {
 				ServiceReference sRef = srs[i];
-				Logger.print("sRef: " + sRef);
+				Logger.d(TAG, "sRef: " + sRef);
 
 				String[] pks = sRef.getPropertyKeys();
 				int j = 0;
 				while (j < pks.length) {
-					Logger.print("pks[" + j + "]: " + pks[j]
-							+ ", event.getProperty(" + pks[j] + "): "
-							+ sRef.getProperty(pks[j]));
+					Logger.d(TAG,
+							"pks[" + j + "]: " + pks[j]
+									+ ", event.getProperty(" + pks[j] + "): "
+									+ sRef.getProperty(pks[j]));
 					j = j + 1;
 				}
 
 				EnOceanMessageDescriptionSet eomds = (EnOceanMessageDescriptionSet) bc
 						.getService(sRef);
-				Logger.print("eomds: " + eomds);
-				Logger.print("eomds.getMessageDescription(165, 2, 5, -1): "
+				Logger.d(TAG, "eomds: " + eomds);
+				Logger.d(TAG, "eomds.getMessageDescription(165, 2, 5, -1): "
 						+ eomds.getMessageDescription(165, 2, 5, -1));
-				Logger.print("eomds.getMessageDescription(213, 0, 1, -1): "
+				Logger.d(TAG, "eomds.getMessageDescription(213, 0, 1, -1): "
 						+ eomds.getMessageDescription(213, 0, 1, -1));
-				Logger.print("eomds.getMessageDescription(246, 2, 1, -1): "
+				Logger.d(TAG, "eomds.getMessageDescription(246, 2, 1, -1): "
 						+ eomds.getMessageDescription(246, 2, 1, -1));
-				Logger.print("eomds.getMessageDescription(-1, -1, -1, -1): "
+				Logger.d(TAG, "eomds.getMessageDescription(-1, -1, -1, -1): "
 						+ eomds.getMessageDescription(-1, -1, -1, -1));
 
 				i = i + 1;
 			}
 		}
 
-		System.out.println("OUT: com.orange.enocean.eeps.Activator.start(bc: "
-				+ bc + ")");
+		Logger.d(TAG, "OUT: com.orange.enocean.eeps.Activator.start(bc: " + bc
+				+ ")");
 	}
 
 	public void stop(BundleContext bundleContext) {
-		System.out.println("IN: com.orange.enocean.eeps.Activator.stop(bc: "
+		Logger.d(TAG, "IN: com.orange.enocean.eeps.Activator.stop(bc: "
 				+ bundleContext + ")");
 		sReg.unregister();
-		System.out.println("OUT: com.orange.enocean.eeps.Activator.stop(bc: "
-				+ bc + ")");
+		Logger.d(TAG, "OUT: com.orange.enocean.eeps.Activator.stop(bc: " + bc
+				+ ")");
 	}
 }

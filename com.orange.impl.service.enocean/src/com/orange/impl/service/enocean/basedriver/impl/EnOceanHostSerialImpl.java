@@ -45,6 +45,9 @@ import com.orange.impl.service.enocean.utils.Utils;
 public class EnOceanHostSerialImpl extends EnOceanHostImpl implements
 		SerialPortEventListener {
 
+	/** TAG */
+	public static final String TAG = EnOceanHostSerialImpl.class.getName();
+
 	private static final int ENOCEAN_DEFAULT_TTY_SPEED = 57600;
 
 	private Object syncObject;
@@ -56,14 +59,14 @@ public class EnOceanHostSerialImpl extends EnOceanHostImpl implements
 	 */
 	public EnOceanHostSerialImpl(String path, BundleContext bc) {
 		super(path, bc);
-		System.out
-				.println("EnOceanHostSerialImpl.EnOceanHostSerialImpl(String path: "
+		Logger.d(TAG,
+				"EnOceanHostSerialImpl.EnOceanHostSerialImpl(String path: "
 						+ path + ", BundleContext bc: " + bc + ")");
 		this.syncObject = new Object();
 	}
 
 	public void startup() throws EnOceanHostImplException {
-		System.out.println("EnOceanHostSerialImpl.startup()");
+		Logger.d(TAG, "EnOceanHostSerialImpl.startup()");
 		this.isRunning = true;
 		try {
 			openSerialPort(donglePath, ENOCEAN_DEFAULT_TTY_SPEED);
@@ -84,12 +87,12 @@ public class EnOceanHostSerialImpl extends EnOceanHostImpl implements
 				if (!this.isRunning) {
 					return;
 				}
-				System.out
-						.println("EnOceanHostSerialImpl.run(), try to read from this.serialPort.getInputStream()...");
+				Logger.d(
+						TAG,
+						"EnOceanHostSerialImpl.run(), try to read from this.serialPort.getInputStream()...");
 				int _byte = inputStream.read();
-				System.out
-						.println("EnOceanHostSerialImpl.run(), just read _byte: "
-								+ _byte);
+				Logger.d(TAG, "EnOceanHostSerialImpl.run(), just read _byte: "
+						+ _byte);
 				if (_byte == -1) {
 					throw new IOException("buffer end was reached");
 				}
