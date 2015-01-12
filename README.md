@@ -14,8 +14,8 @@ Tree
                                        ; It's a generic interface bundle to the Serial port.
  
     - com.orange.enocean.eeps          ; This bundle is an OSGi EnOcean bundle that contained the
-                                       ; three EEPs that the EnOcean Alliance allowed the project
-                                       ; to use.
+                                       ; three EEPs (i.e. A5-02-05, D5-00-01, and F6-02-01) that 
+                                       ; the EnOcean Alliance allowed the project to use.
  
     - com.orange.impl.service.enocean  ; This bundle is the EnOcean Base Driver itself. This 
                                        ; version contains an EnOceanHost Implementation that 
