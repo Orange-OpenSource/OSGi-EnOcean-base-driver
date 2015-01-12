@@ -13,7 +13,9 @@ Tree
     - driver-rx-tx                     ; see https://github.com/Orange-OpenSource/Driver-RX-TX
                                        ; It's a generic interface bundle to the Serial port.
  
-    - com.orange.enocean.eeps          ;
+    - com.orange.enocean.eeps          ; This bundle is an OSGi EnOcean bundle that contained the
+                                       ; three EEPs that the EnOcean Alliance allowed the project
+                                       ; to use.
  
     - com.orange.impl.service.enocean  ; This bundle is the EnOcean Base Driver itself. This 
                                        ; version contains an EnOceanHost Implementation that 
