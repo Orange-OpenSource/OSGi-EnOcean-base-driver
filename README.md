@@ -23,11 +23,11 @@ Tree
                                          ; EnOcean base driver. It subscribes to both service and 
                                          ; event notifications regarding EnOcean events on OSGi.
  
-    ├── cnf								 ; Bnd's repo (contains, among others, the OSGi RFC199 API 
-										 ; bundle (org.osgi.service.enocean-6.0.0.jar) needed to 
-										 ; compile, and execute the project.
+    ├── cnf                              ; Bnd's repo (contains, among others, the OSGi RFC199 API 
+                                         ; bundle (org.osgi.service.enocean-6.0.0.jar) needed to 
+                                         ; compile, and execute the project.
                                          ; see https://github.com/osgi/design/tree/master/rfcs/rfc0199
-										 ; for the related RFC199 document.
+                                         ; for the related RFC199 document.
 										 
     └── README.md
 
