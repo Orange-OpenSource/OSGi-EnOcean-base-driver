@@ -55,7 +55,7 @@ START LEVEL 1
     0|Active     |    0|System Bundle (4.4.1)
     1|Active     |    1|com.orange.enocean.eeps (1.0.0)
     2|Active     |    1|com.orange.impl.service.enocean (1.0.0)
-    3|Active     |    1|com.orange.sample.enocean.client (0.0.0)
+    3|Active     |    1|com.orange.sample.enocean.client (1.0.0)
     4|Active     |    1|Apache Felix Bundle Repository (2.0.2)
     5|Active     |    1|Apache Felix EventAdmin (1.3.2)
     6|Active     |    1|Apache Felix Gogo Command (0.14.0)
