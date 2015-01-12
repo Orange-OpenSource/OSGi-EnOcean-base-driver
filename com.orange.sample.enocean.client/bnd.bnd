@@ -6,6 +6,7 @@ Bundle-Copyright			= Copyright (C) 2013 - 2015 Orange.
 Bundle-Description			= A sample app that demonstrates EnOcean calpabilities.
 Bundle-RequiredExecutionEnvironment = OSGi/Minimum-1.1
 Bundle-Vendor				= Orange
+Bundle-Version    : 1.0.0
 
 Private-Package:${p}.*;-split-package:=first
 
