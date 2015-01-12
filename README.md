@@ -9,27 +9,26 @@ Functional and technical descriptions:
 
 Tree
 ----
-
     .
-    ├── driver-rx-tx                     ; see https://github.com/Orange-OpenSource/Driver-RX-TX
+    ─ driver-rx-tx                     ; see https://github.com/Orange-OpenSource/Driver-RX-TX
                                          ; It's a generic interface bundle to the Serial port.
  
-    ├── com.orange.impl.service.enocean  ; This bundle is the EnOcean Base Driver itself. This 
+    ─ com.orange.impl.service.enocean  ; This bundle is the EnOcean Base Driver itself. This 
                                          ; version contains an EnOceanHost Implementation that 
                                          ; is able to communicate over the serial port.
                                          ; see https://github.com/osgi/design/tree/master/rfcs/rfc0199
  
-    ├── com.orange.sample.enocean.client ; This is a very simple sample application for using the 
+    ─ com.orange.sample.enocean.client ; This is a very simple sample application for using the 
                                          ; EnOcean base driver. It subscribes to both service and 
                                          ; event notifications regarding EnOcean events on OSGi.
  
-    ├── cnf                              ; Bnd's repo (contains, among others, the OSGi RFC199 API 
+    ─ cnf                              ; Bnd's repo (contains, among others, the OSGi RFC199 API 
                                          ; bundle (org.osgi.service.enocean-6.0.0.jar) needed to 
                                          ; compile, and execute the project.
                                          ; see https://github.com/osgi/design/tree/master/rfcs/rfc0199
                                          ; for the related RFC199 document.
 										 
-    └── README.md
+    ─ README.md
 
 
 Authors
