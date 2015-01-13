@@ -64,16 +64,16 @@ public class MiscCommand {
 				int i = 0;
 				while (i < allsrs.length) {
 					ServiceReference sr = allsrs[i];
-					Logger.d(TAG, "sr: " + sr);
+					Logger.d(TAG, "-sr: " + sr);
 					String[] pks = sr.getPropertyKeys();
 					int j = 0;
 					while (j < pks.length) {
 						Logger.d(TAG,
-								"pks[" + j + "]: " + pks[j]
+								"--pks[" + j + "]: " + pks[j]
 										+ ", sr.getProperty(" + pks[j] + "): "
 										+ sr.getProperty(pks[j]));
 						Logger.d(TAG,
-								"sr.getProperty("
+								"--sr.getProperty("
 										+ pks[j]
 										+ ").getClass().getName()"
 										+ sr.getProperty(pks[j]).getClass()
