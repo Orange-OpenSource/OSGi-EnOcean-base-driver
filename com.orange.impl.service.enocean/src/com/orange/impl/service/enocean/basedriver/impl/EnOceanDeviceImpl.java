@@ -199,55 +199,6 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 					description = "Single Input Contact";
 				}
 			}
-		} else if ("210".equals(String.valueOf(rorg))) {
-			// hex 0xd2 == int 210.
-			if ("1".equals(String.valueOf(correctedFunc))) {
-				if ("8".equals(String.valueOf(correctedType))) {
-					Logger.d(TAG, "This is a D2-01-08 device.");
-					if (friendlyName == null) {
-						friendlyName = "D2-01-08";
-					}
-					if (description == null) {
-						description = "Electronic switches and dimmers with Energy Measurement and Local Control";
-					}
-				} else {
-					Logger.d(TAG, "This is a D2-01-yz device.");
-					if (friendlyName == null) {
-						friendlyName = "D2-01-yz";
-					}
-					if (description == null) {
-						description = "Not handled";
-					}
-				}
-			} else if ("160".equals(String.valueOf(correctedFunc))) {
-				// hex 0xa0 == int 160.
-				if ("1".equals(String.valueOf(correctedType))) {
-					// hex 0x01 == int 1.
-					Logger.d(TAG, "This is a D2-A0-01 device.");
-					if (friendlyName == null) {
-						friendlyName = "AfrisoLab Water Valve";
-					}
-					if (description == null) {
-						description = "Standard Control (BI-DIR) (D2-A0-01)";
-					}
-				} else {
-					Logger.d(TAG, "This is a D2-01-yz device.");
-					if (friendlyName == null) {
-						friendlyName = "D2-01-yz";
-					}
-					if (description == null) {
-						description = "Not handled";
-					}
-				}
-			} else {
-				Logger.d(TAG, "This is a D2-wx-yz device.");
-				if (friendlyName == null) {
-					friendlyName = "D2-wx-yz";
-				}
-				if (description == null) {
-					description = "Not handled";
-				}
-			}
 		} else {
 			Logger.d(
 					TAG,

@@ -4,3 +4,5 @@
 0x00123456_RORG_FUNC_TYPE_FRIENDLYNAME_DESCRIPTION=00##22##44##frnm##no description
 0x018c0874_RORG_FUNC_TYPE_FRIENDLYNAME_DESCRIPTION=F6##99##99##Eltako Smoke Detector##(F6)
 0x01819912_RORG_FUNC_TYPE_FRIENDLYNAME_DESCRIPTION=F6##05##01##AfrisoLab Water Sensor##Liquid Leakage Sensor (mechanic energy harvester) (F6-05-01)
+#0x11111111_RORG_FUNC_TYPE_FRIENDLYNAME_DESCRIPTION=D2##01##08##D2-01-08##Electronic switches and dimmers with Energy Measurement and Local Control
+0x22222222_RORG_FUNC_TYPE_FRIENDLYNAME_DESCRIPTION=D2##A0##01##AfrisoLab Water Valve##Standard Control (BI-DIR) (D2-A0-01)
