@@ -23,6 +23,8 @@
 
 package com.orange.impl.service.enocean.basedriver.impl;
 
+import gnu.io.NoSuchPortException;
+import gnu.io.PortInUseException;
 import gnu.io.RXTXPort;
 import gnu.io.SerialPortEvent;
 import gnu.io.SerialPortEventListener;
@@ -36,7 +38,6 @@ import org.osgi.framework.BundleContext;
 import com.orange.impl.service.enocean.basedriver.esp.EspPacket;
 import com.orange.impl.service.enocean.utils.EnOceanHostImplException;
 import com.orange.impl.service.enocean.utils.Logger;
-import com.orange.impl.service.enocean.utils.PortInUseException;
 import com.orange.impl.service.enocean.utils.Utils;
 
 /**
@@ -168,8 +169,8 @@ public class EnOceanHostSerialImpl extends EnOceanHostImpl implements
 	}
 
 	private void openSerialPort(String s, int i) throws IOException,
-			PortInUseException, UnsupportedCommOperationException,
-			TooManyListenersException, gnu.io.PortInUseException {
+			UnsupportedCommOperationException, TooManyListenersException,
+			PortInUseException, NoSuchPortException {
 		this.serialPort = new RXTXPort(s);
 		this.serialPort.setSerialPortParams(i, 8, 1, 0);
 		this.serialPort.setFlowControlMode(0);
