@@ -1,2 +1,5 @@
 /generated/
 /bin/
+/target/classes/
+/target/maven-status/
+/target/xtend/
